@@ -732,7 +732,7 @@ static void bitcoind_failure(struct plugin *p, const char *error_message)
 	plugin_err(p, "\n%s\n\n"
 		      "Make sure you have palladiumd running and that palladium-cli"
 		      " is able to connect to palladiumd.\n\n"
-		      "You can verify that your Bitcoin Core installation is"
+		      "You can verify that your Palladium installation is"
 		      " ready for use by running:\n\n"
 		      "    $ %s 'hello world'\n", error_message,
 		   args_string(cmd, cmd, NULL));
@@ -776,15 +776,34 @@ static void parse_getnetworkinfo_result(struct plugin *p, const char *buf)
 	tal_free(result);
 }
 
+/* Exit code 7 means RPC_IN_WARMUP: palladiumd is starting up but not ready yet */
+#define RPC_IN_WARMUP_EXIT_CODE 7
+
 static void wait_and_check_bitcoind(struct plugin *p)
 {
 	struct bcli_result *res;
 	const char **cmd;
+	int retries = 0;
 
 	/* Special case: -rpcwait flags go on command line, not stdin */
 	cmd = gather_args(bitcoind, NULL, "-rpcwait",
 			  "getnetworkinfo", NULL);
+
+retry:
 	res = execute_bitcoin_cli(bitcoind, p, cmd, NULL);
+
+	/* palladiumd returns 7 (RPC_IN_WARMUP) while still starting up.
+	 * Keep retrying for up to 60 seconds. */
+	if (res->exitstatus == RPC_IN_WARMUP_EXIT_CODE) {
+		if (retries++ < 60) {
+			sleep(1);
+			tal_free(res);
+			goto retry;
+		}
+		bitcoind_failure(p,
+				 "palladiumd still warming up after 60s. "
+				 "Is palladiumd fully started?");
+	}
 
 	if (res->exitstatus == 1)
 		bitcoind_failure(p,

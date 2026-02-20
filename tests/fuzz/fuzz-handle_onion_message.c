@@ -67,7 +67,7 @@ void init(int *argc, char ***argv)
 		common_setup("fuzzer");
 	lightningd_fd = open("/dev/null", O_WRONLY);
 	status_setup_sync(lightningd_fd);
-	chainparams = chainparams_for_network("bitcoin");
+	chainparams = chainparams_for_network("palladium");
 
 	memset(&priv, 'b', sizeof(priv));
 	memset(&siphashseed, 1, sizeof(siphashseed));

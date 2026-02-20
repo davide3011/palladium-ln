@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 	size_t len;
 
 	common_setup(argv[0]);
-	chainparams = chainparams_for_network("bitcoin");
+	chainparams = chainparams_for_network("palladium");
 
 	msg = tal_arr(tmpctx, u8, 0);
 	tx = bitcoin_tx_from_hex(tmpctx, raw_tx, strlen(raw_tx));

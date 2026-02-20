@@ -28,7 +28,7 @@ void init(int *argc, char ***argv)
 		common_setup("fuzzer");
 	int devnull = open("/dev/null", O_WRONLY);
 	status_setup_sync(devnull);
-	chainparams = chainparams_for_network("bitcoin");
+	chainparams = chainparams_for_network("palladium");
 }
 
 #define MAX_SATS (u64)WALLY_SATOSHI_PER_BTC * WALLY_BTC_MAX

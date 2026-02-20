@@ -1789,7 +1789,7 @@ def test_gossip_announce_invalid_block(node_factory, bitcoind):
     """
     # Need to slow down the poll interval so the announcement preceeds the
     # blockchain catchup, otherwise we won't call `getfilteredblock`.
-    opts = {'dev-bitcoind-poll': TIMEOUT // 2}
+    opts = {'dev-palladiumd-poll': TIMEOUT // 2}
 
     l1 = node_factory.get_node(options=opts)
     bitcoind.generate_block(1)
@@ -1819,7 +1819,7 @@ def test_gossip_announce_unknown_block(node_factory, bitcoind):
     """
     # Need to slow down the poll interval so the announcement preceeds the
     # blockchain catchup, otherwise we won't call `getfilteredblock`.
-    opts = {'dev-bitcoind-poll': TIMEOUT // 2}
+    opts = {'dev-palladiumd-poll': TIMEOUT // 2}
 
     l1 = node_factory.get_node(options=opts)
 

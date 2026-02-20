@@ -79,7 +79,7 @@ int main(int argc, const char *argv[])
 	struct bitcoin_block *b;
 
 	common_setup(argv[0]);
-	chainparams = chainparams_for_network("bitcoin");
+	chainparams = chainparams_for_network("palladium");
 	b = bitcoin_block_from_hex(NULL, chainparams,
 				   block, strlen(block));
 

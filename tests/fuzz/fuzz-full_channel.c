@@ -240,7 +240,7 @@ void init(int *argc, char ***argv)
 	/* Don't call this if we're in unit-test mode, as libfuzz.c does it */
 	if (!tmpctx)
 		common_setup("fuzzer");
-	chainparams = chainparams_for_network("bitcoin");
+	chainparams = chainparams_for_network("palladium");
 	int devnull = open("/dev/null", O_WRONLY);
 	status_setup_sync(devnull);
 }

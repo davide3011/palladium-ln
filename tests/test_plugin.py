@@ -1928,8 +1928,8 @@ def test_bitcoin_backend(node_factory, bitcoind):
     del l1.daemon.opts["plugin-dir"]
     del l1.daemon.opts["disable-plugin"]
     l1.start()
-    assert l1.daemon.is_in_log("bitcoin-cli initialized and connected to"
-                               " bitcoind")
+    assert l1.daemon.is_in_log("palladium-cli initialized and connected to"
+                               " palladiumd")
 
 
 def test_bitcoin_backend_gianttx(node_factory, bitcoind):

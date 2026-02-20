@@ -178,7 +178,7 @@ int main(int argc, char *argv[])
 	 * * `357wnc5r2ueh7ck6q93dj32dlqnls087fxdwk8qakdyafkq3yap9us6v52vjjsrvywa6rt52cm9r9zqt8r2t7mlcwspyetp5h2tztugp`: signature
 	 */
 	b11 = new_bolt11(tmpctx, NULL);
-	b11->chain = chainparams_for_network("bitcoin");
+	b11->chain = chainparams_for_network("palladium");
 	b11->timestamp = 1496314658;
 	if (!hex_decode("0001020304050607080900010203040506070809000102030405060708090102",
 			strlen("0001020304050607080900010203040506070809000102030405060708090102"),
@@ -222,7 +222,7 @@ int main(int argc, char *argv[])
 	 */
 	msatoshi = AMOUNT_MSAT(2500 * (1000ULL * 100000000) / 1000000);
 	b11 = new_bolt11(tmpctx, &msatoshi);
-	b11->chain = chainparams_for_network("bitcoin");
+	b11->chain = chainparams_for_network("palladium");
 	b11->timestamp = 1496314658;
 	b11->payment_secret = tal(b11, struct secret);
 	memset(b11->payment_secret, 0x11, sizeof(*b11->payment_secret));
@@ -264,7 +264,7 @@ int main(int argc, char *argv[])
 	 */
 	msatoshi = AMOUNT_MSAT(20 * (1000ULL * 100000000) / 1000);
 	b11 = new_bolt11(tmpctx, &msatoshi);
-	b11->chain = chainparams_for_network("bitcoin");
+	b11->chain = chainparams_for_network("palladium");
 	b11->timestamp = 1496314658;
 	b11->payment_secret = tal(b11, struct secret);
 	memset(b11->payment_secret, 0x11, sizeof(*b11->payment_secret));
@@ -299,7 +299,7 @@ int main(int argc, char *argv[])
 	/* ALL UPPERCASE is allowed (useful for QR codes) */
 	msatoshi = AMOUNT_MSAT(2500 * (1000ULL * 100000000) / 1000000);
 	b11 = new_bolt11(tmpctx, &msatoshi);
-	b11->chain = chainparams_for_network("bitcoin");
+	b11->chain = chainparams_for_network("palladium");
 	b11->timestamp = 1496314658;
 	b11->payment_secret = tal(b11, struct secret);
 	memset(b11->payment_secret, 0x11, sizeof(*b11->payment_secret));
@@ -365,7 +365,7 @@ int main(int argc, char *argv[])
 	 */
 	msatoshi = AMOUNT_MSAT(25 * (1000ULL * 100000000) / 1000);
 	b11 = new_bolt11(tmpctx, &msatoshi);
-	b11->chain = chainparams_for_network("bitcoin");
+	b11->chain = chainparams_for_network("palladium");
 	b11->timestamp = 1496314658;
 	if (!hex_decode("0001020304050607080900010203040506070809000102030405060708090102",
 			strlen("0001020304050607080900010203040506070809000102030405060708090102"),
@@ -564,7 +564,7 @@ int main(int argc, char *argv[])
 	 */
 	msatoshi = AMOUNT_MSAT(967878534);
 	b11 = new_bolt11(tmpctx, &msatoshi);
-	b11->chain = chainparams_for_network("bitcoin");
+	b11->chain = chainparams_for_network("palladium");
 	b11->timestamp = 1572468703;
 	b11->expiry = 604800;
 	b11->min_final_cltv_expiry = 10;
@@ -622,7 +622,7 @@ int main(int argc, char *argv[])
 	 */
 	msatoshi = AMOUNT_MSAT(1000000000);
 	b11 = new_bolt11(tmpctx, &msatoshi);
-	b11->chain = chainparams_for_network("bitcoin");
+	b11->chain = chainparams_for_network("palladium");
 	b11->timestamp = 1496314658;
 	if (!hex_decode("0001020304050607080900010203040506070809000102030405060708090102",
 			strlen("0001020304050607080900010203040506070809000102030405060708090102"),

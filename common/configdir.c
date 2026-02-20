@@ -323,7 +323,7 @@ struct configvar **initial_config_opts(const tal_t *ctx,
 	opt_argv0 = argv[0];
 
 	/* Default chain (a global) is bitcoin. */
-	chainparams = chainparams_for_network("bitcoin");
+	chainparams = chainparams_for_network("palladium");
 
 	/* First, they could specify a config, or base dir. */
 	*config_filename = NULL;
@@ -352,7 +352,7 @@ struct configvar **initial_config_opts(const tal_t *ctx,
 				 opt_set_specific_network, "signet",
 				 "Alias for --network=signet");
 	opt_register_early_noarg("--mainnet",
-				 opt_set_specific_network, "bitcoin",
+				 opt_set_specific_network, "palladium",
 				 "Alias for --network=bitcoin");
 	opt_register_early_noarg("--regtest",
 				 opt_set_specific_network, "regtest",

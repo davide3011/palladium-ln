@@ -169,12 +169,12 @@ int main(int argc, char *argv[])
 	offer->offer_chains[0] = chainparams_for_network("testnet")->genesis_blockhash;
 	print_valid_offer(offer, "for testnet",
 			  "chains[0] is testnet", NULL);
-	offer->offer_chains[0] = chainparams_for_network("bitcoin")->genesis_blockhash;
+	offer->offer_chains[0] = chainparams_for_network("palladium")->genesis_blockhash;
 	print_valid_offer(offer, "for bitcoin (redundant)",
 			  "chains[0] is bitcoin", NULL);
 	offer->offer_chains = tal_arr(offer, struct bitcoin_blkid, 2);
 	offer->offer_chains[0] = chainparams_for_network("liquid")->genesis_blockhash;
-	offer->offer_chains[1] = chainparams_for_network("bitcoin")->genesis_blockhash;
+	offer->offer_chains[1] = chainparams_for_network("palladium")->genesis_blockhash;
 	print_valid_offer(offer, "for bitcoin or liquidv1",
 			  "chains[0] is liquidv1, chains[1] is bitcoin", NULL);
 	offer->offer_chains = NULL;

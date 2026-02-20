@@ -15,10 +15,10 @@ cli = "bitcoin-cli" if network == "regtest" else "elements-cli"
 
 def bcli(plugin, cmd):
     ret = subprocess.run([cli,
-                          '-datadir={}'.format(plugin.get_option("bitcoin-datadir")),
-                          '-rpcuser={}'.format(plugin.get_option("bitcoin-rpcuser")),
-                          '-rpcpassword={}'.format(plugin.get_option("bitcoin-rpcpassword")),
-                          '-rpcport={}'.format(plugin.get_option("bitcoin-rpcport"))]
+                          '-datadir={}'.format(plugin.get_option("palladium-datadir")),
+                          '-rpcuser={}'.format(plugin.get_option("palladium-rpcuser")),
+                          '-rpcpassword={}'.format(plugin.get_option("palladium-rpcpassword")),
+                          '-rpcport={}'.format(plugin.get_option("palladium-rpcport"))]
                          + cmd, stdout=subprocess.PIPE)
     if ret.returncode != 0:
         return None
@@ -86,10 +86,10 @@ def getutxout(plugin, txid, vout, *kwargs):
             "script": txout['scriptPubKey']['hex']}
 
 
-plugin.add_option("bitcoin-rpcuser", '', '')
-plugin.add_option("bitcoin-rpcpassword", '', '')
-plugin.add_option("bitcoin-datadir", '', '')
-plugin.add_option("bitcoin-rpcport", '', '')
+plugin.add_option("palladium-rpcuser", '', '')
+plugin.add_option("palladium-rpcpassword", '', '')
+plugin.add_option("palladium-datadir", '', '')
+plugin.add_option("palladium-rpcport", '', '')
 plugin.add_option("badestimate-badorder", False, 'Send out-of-order estimates', opt_type='bool')
 
 plugin.run()

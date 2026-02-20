@@ -468,7 +468,7 @@ def test_db_sanity_checks(bitcoind, node_factory):
 
     # Now try wrong network,
     l1.daemon.opts['wallet'] = "sqlite3://" + l1.db.path
-    l1.daemon.opts['network'] = "bitcoin"
+    l1.daemon.opts['network'] = "palladium"
 
     l1.daemon.start(wait_for_initialized=False, stderr_redir=True)
     l1.daemon.wait_for_log(r'\*\*BROKEN\*\* wallet: Wallet blockchain hash does not match network blockchain hash')

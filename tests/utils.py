@@ -18,7 +18,7 @@ CHANNEL_SIZE = 50000
 
 def default_ln_port(network: str) -> int:
     network_map = {
-        "bitcoin": 9735,
+        "palladium": 9735,
         "testnet": 19735,
         "regtest": 19846,
         "signet": 39735,

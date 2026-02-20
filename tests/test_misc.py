@@ -2770,7 +2770,7 @@ def test_new_node_is_mainnet(node_factory):
     l1 = node_factory.get_node(start=False, may_fail=True)
 
     basedir = l1.daemon.opts.get("lightning-dir")
-    netdir = os.path.join(basedir, "bitcoin")
+    netdir = os.path.join(basedir, "palladium")
 
     shutil.rmtree(basedir)
 

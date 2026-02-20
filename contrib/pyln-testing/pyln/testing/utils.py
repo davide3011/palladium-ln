@@ -418,9 +418,10 @@ class SimpleBitcoinProxy:
     throwaway connections. This is easier than to reach into the RPC
     library to close, reopen and reauth upon failure.
     """
-    def __init__(self, btc_conf_file, timeout=TIMEOUT, *args, **kwargs):
+    def __init__(self, btc_conf_file, timeout=TIMEOUT, wallet_url=None, *args, **kwargs):
         self.__btc_conf_file__ = btc_conf_file
         self.__timeout__ = timeout
+        self.__wallet_url__ = wallet_url
 
     def __getattr__(self, name):
         if name.startswith('__') and name.endswith('__'):
@@ -428,8 +429,11 @@ class SimpleBitcoinProxy:
             raise AttributeError
 
         # Create a callable to do the actual call
-        proxy = BitcoinProxy(btc_conf_file=self.__btc_conf_file__,
-                             timeout=self.__timeout__)
+        proxy_kwargs = dict(btc_conf_file=self.__btc_conf_file__,
+                            timeout=self.__timeout__)
+        if self.__wallet_url__:
+            proxy_kwargs['service_url'] = self.__wallet_url__
+        proxy = BitcoinProxy(**proxy_kwargs)
 
         def f(*args):
             logging.debug("Calling {name} with arguments {args}".format(
@@ -449,7 +453,7 @@ class SimpleBitcoinProxy:
         return f
 
 
-class BitcoinD(TailableProc):
+class PalladiumD(TailableProc):
 
     def __init__(self, bitcoin_dir="/tmp/palladiumd-test", rpcport=None):
         TailableProc.__init__(self, bitcoin_dir, verbose=False)
@@ -470,7 +474,7 @@ class BitcoinD(TailableProc):
             os.makedirs(regtestdir)
 
         self.cmd_line = [
-            'bitcoind',
+            'palladiumd',
             '-datadir={}'.format(bitcoin_dir),
             '-printtoconsole',
             '-server',
@@ -490,7 +494,7 @@ class BitcoinD(TailableProc):
         # For after 0.16.1 (eg. 3f398d7a17f136cd4a67998406ca41a124ae2966), this
         # needs its own [regtest] section.
         BITCOIND_REGTEST = {'rpcport': rpcport}
-        self.conf_file = os.path.join(bitcoin_dir, 'bitcoin.conf')
+        self.conf_file = os.path.join(bitcoin_dir, 'palladium.conf')
         write_config(self.conf_file, BITCOIND_CONFIG, BITCOIND_REGTEST)
         self.rpc = SimpleBitcoinProxy(btc_conf_file=self.conf_file)
         self.proxies = []
@@ -503,7 +507,7 @@ class BitcoinD(TailableProc):
         TailableProc.start(self)
         self.wait_for_log("Done loading", timeout=TIMEOUT)
 
-        logging.info("BitcoinD started")
+        logging.info("PalladiumD started")
         if wallet_file:
             self.rpc.restorewallet("lightningd-tests", wallet_file)
         else:
@@ -511,6 +515,25 @@ class BitcoinD(TailableProc):
                 self.rpc.createwallet("lightningd-tests")
             except JSONRPCError:
                 self.rpc.loadwallet("lightningd-tests")
+
+        # Re-initialize rpc proxy with the wallet-scoped URL so that
+        # sendtoaddress, getbalance, etc. use the lightningd-tests wallet.
+        # Palladiumd's multi-wallet mode requires explicit wallet path.
+        rpc_url = "http://{}:{}@127.0.0.1:{}/wallet/lightningd-tests".format(
+            BITCOIND_CONFIG['rpcuser'],
+            BITCOIND_CONFIG['rpcpassword'],
+            self.rpcport,
+        )
+        self.rpc = SimpleBitcoinProxy(
+            btc_conf_file=self.conf_file,
+            wallet_url=rpc_url,
+        )
+
+        # Palladiumd starts in IBD (initialblockdownload=true) even in regtest.
+        # Generate 122 blocks: Palladium COINBASE_MATURITY=120, so needs 121+ blocks
+        # to mature the first coinbase reward (plus 1 extra for safety).
+        addr = self.rpc.getnewaddress()
+        self.rpc.generatetoaddress(122, addr)
 
     def stop(self):
         for p in self.proxies:
@@ -656,14 +679,14 @@ class BitcoinD(TailableProc):
             self.rpc.submitblock(b)
 
 
-class ElementsD(BitcoinD):
+class ElementsD(PalladiumD):
     def __init__(self, bitcoin_dir="/tmp/bitcoind-test", rpcport=None):
         config = BITCOIND_CONFIG.copy()
         if 'regtest' in config:
             del config['regtest']
 
         config['chain'] = 'liquid-regtest'
-        BitcoinD.__init__(self, bitcoin_dir, rpcport)
+        PalladiumD.__init__(self, bitcoin_dir, rpcport)
 
         self.cmd_line = [
             'elementsd',
@@ -739,8 +762,8 @@ class LightningD(TailableProc):
 
             'network': TEST_NETWORK,
             'ignore-fee-limits': 'false',
-            'bitcoin-rpcuser': BITCOIND_CONFIG['rpcuser'],
-            'bitcoin-rpcpassword': BITCOIND_CONFIG['rpcpassword'],
+            'palladium-rpcuser': BITCOIND_CONFIG['rpcuser'],
+            'palladium-rpcpassword': BITCOIND_CONFIG['rpcpassword'],
 
             # Make sure we don't touch any existing config files in the user's $HOME
             'palladium-datadir': lightning_dir,
@@ -771,7 +794,7 @@ class LightningD(TailableProc):
                 f.write(seed)
 
         self.opts['dev-fast-gossip'] = None
-        self.opts['dev-bitcoind-poll'] = 1
+        self.opts['dev-palladiumd-poll'] = 1
         self.prefix = 'lightningd-%d' % (node_id)
         # Log to stdout so we see it in failure cases, and log file for TailableProc.
         self.opts['log-file'] = ['-', os.path.join(lightning_dir, "log")]
@@ -806,7 +829,7 @@ class LightningD(TailableProc):
         return self.cmd_prefix + [self.executable] + self.early_opts + opts
 
     def start(self, stdin=None, wait_for_initialized=True, stderr_redir=False):
-        self.opts['bitcoin-rpcport'] = self.rpcproxy.rpcport
+        self.opts['palladium-rpcport'] = self.rpcproxy.rpcport
         TailableProc.start(self, stdin, stdout_redir=False, stderr_redir=stderr_redir)
         if wait_for_initialized:
             self.wait_for_log("Server started with public key")
@@ -980,7 +1003,7 @@ class LightningNode(object):
         if dsn is not None:
             self.daemon.opts['wallet'] = dsn
         if VALGRIND:
-            trace_skip_pattern = '*python*,*bitcoin-cli*,*elements-cli*,*cln-grpc*,*clnrest*,*wss-proxy*,*cln-bip353*,*reckless'
+            trace_skip_pattern = '*python*,*palladium-cli*,*elements-cli*,*cln-grpc*,*clnrest*,*wss-proxy*,*cln-bip353*,*reckless'
             if not valgrind_plugins:
                 trace_skip_pattern += ',*plugins*'
             self.daemon.cmd_prefix = [
@@ -1160,12 +1183,12 @@ class LightningNode(object):
         c.close()
         db.close()
 
-    def is_synced_with_bitcoin(self, info=None):
+    def is_synced_with_palladium(self, info=None):
         if info is None:
             info = self.rpc.getinfo()
         return 'warning_palladiumd_sync' not in info and 'warning_lightningd_sync' not in info
 
-    def start(self, wait_for_bitcoind_sync=True, stderr_redir=False):
+    def start(self, wait_for_bitcoind_sync=True, wait_for_palladiumd_sync=True, stderr_redir=False):
         # If we have a disconnect string, dump it to a file for daemon.
         if 'dev-disconnect' in self.daemon.opts:
             with open(self.daemon.opts['dev-disconnect'], "w") as f:
@@ -1178,8 +1201,8 @@ class LightningNode(object):
         # This shortcut is sufficient for our simple tests.
         self.port = self.info['binding'][0]['port']
         self.gossip_store.open()  # Reopen the gossip_store now that we should have one
-        if wait_for_bitcoind_sync and not self.is_synced_with_bitcoin(self.info):
-            wait_for(lambda: self.is_synced_with_bitcoin())
+        if (wait_for_bitcoind_sync or wait_for_palladiumd_sync) and not self.is_synced_with_palladium(self.info):
+            wait_for(lambda: self.is_synced_with_palladium())
 
     def stop(self, timeout=10):
         """ Attempt to do a clean shutdown, but kill if it hangs

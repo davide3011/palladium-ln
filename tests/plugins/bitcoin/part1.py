@@ -30,9 +30,9 @@ def getchaininfo(plugin, **kwargs):
 
 
 # We don't use these options, but it allows us to get to the expected failure.
-plugin.add_option("bitcoin-rpcuser", "", "")
-plugin.add_option("bitcoin-rpcpassword", "", "")
-plugin.add_option("bitcoin-rpcport", "", "")
-plugin.add_option("bitcoin-datadir", "", "")
+plugin.add_option("palladium-rpcuser", "", "")
+plugin.add_option("palladium-rpcpassword", "", "")
+plugin.add_option("palladium-rpcport", "", "")
+plugin.add_option("palladium-datadir", "", "")
 
 plugin.run()

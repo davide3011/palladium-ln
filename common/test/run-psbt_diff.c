@@ -156,7 +156,7 @@ int main(int argc, const char *argv[])
 	struct wally_psbt *start, *end;
 	u32 flags = 0;
 
-	chainparams = chainparams_for_network("bitcoin");
+	chainparams = chainparams_for_network("palladium");
 
 	/* Create two psbts! */
 	end = create_psbt(tmpctx, 1, 1, 0);

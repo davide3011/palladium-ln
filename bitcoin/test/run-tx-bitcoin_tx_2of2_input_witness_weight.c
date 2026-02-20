@@ -25,7 +25,7 @@ int main(int argc, const char *argv[])
 	size_t weight;
 
 	common_setup(argv[0]);
-	chainparams = chainparams_for_network("bitcoin");
+	chainparams = chainparams_for_network("palladium");
 
 	memset(&h, 0, sizeof(h));
 	memset(&p, 1, sizeof(p));

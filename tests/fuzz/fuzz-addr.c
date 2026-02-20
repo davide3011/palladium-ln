@@ -8,7 +8,7 @@
 
 void init(int *argc, char ***argv)
 {
-	chainparams = chainparams_for_network("bitcoin");
+	chainparams = chainparams_for_network("palladium");
 	/* Don't call this if we're in unit-test mode, as libfuzz.c does it */
 	if (!tmpctx)
 		common_setup("fuzzer");

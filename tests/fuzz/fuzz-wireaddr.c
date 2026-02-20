@@ -14,7 +14,7 @@ void init(int *argc, char ***argv)
 	/* Don't call this if we're in unit-test mode, as libfuzz.c does it */
 	if (!tmpctx)
 		common_setup("fuzzer");
-	chainparams = chainparams_for_network("bitcoin");
+	chainparams = chainparams_for_network("palladium");
 }
 
 void run(const uint8_t *data, size_t size)

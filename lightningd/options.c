@@ -812,7 +812,7 @@ static void dev_register_opts(struct lightningd *ld)
 		     opt_set_bool,
 		     &ld->dev_allow_localhost,
 		     "Announce and allow announcments for localhost address");
-	clnopt_witharg("--dev-bitcoind-poll", OPT_DEV|OPT_SHOWINT,
+	clnopt_witharg("--dev-palladiumd-poll", OPT_DEV|OPT_SHOWINT,
 		       opt_set_u32, opt_show_u32,
 		       &ld->topology->poll_seconds,
 		       "Time between polling for new transactions");
@@ -1143,7 +1143,7 @@ static char *list_features_and_exit(struct lightningd *ld)
 
 static char *opt_lightningd_usage(struct lightningd *ld)
 {
-	char *extra = tal_fmt(NULL, "\nA bitcoin lightning daemon (default "
+	char *extra = tal_fmt(NULL, "\nA palladium lightning daemon (default "
 			"values shown for network: %s).", chainparams->network_name);
 	opt_usage_and_exit(extra);
 	tal_free(extra);

@@ -35,7 +35,7 @@ static void hexeq(const void *p, size_t len, const char *hex)
 int main(int argc, const char *argv[])
 {
 	common_setup(argv[0]);
-	chainparams = chainparams_for_network("bitcoin");
+	chainparams = chainparams_for_network("palladium");
 
 	struct bitcoin_tx *tx;
 

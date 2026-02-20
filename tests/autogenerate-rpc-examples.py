@@ -1,6 +1,6 @@
 # NOTE: For detailed documentation, refer to https://docs.corelightning.org/docs/writing-json-schemas.
 # NOTE: Set the test `TIMEOUT` to greater than 3 seconds to prevent failures caused by waiting on the bitcoind response.
-# The `dev-bitcoind-poll` interval is 3 seconds, so a shorter timeout may result in test failures.
+# The `dev-palladiumd-poll` interval is 3 seconds, so a shorter timeout may result in test failures.
 # NOTE: Different nodes are selected to record examples based on data availability, quality, and volume.
 # For example, node `l1` is used to capture examples for `listsendpays`, whereas node `l2` is utilized for `listforwards`.
 
@@ -450,7 +450,7 @@ def setup_test_nodes(node_factory, bitcoind):
                 'allow_bad_gossip': True,
                 'log-level': 'debug',
                 'broken_log': '.*',
-                'dev-bitcoind-poll': 3,    # Default 1; increased to avoid rpc failures
+                'dev-palladiumd-poll': 3,    # Default 1; increased to avoid rpc failures
             }.copy()
             for i in range(6)
         ]
@@ -1322,7 +1322,7 @@ def generate_splice_examples(node_factory, bitcoind):
                 'allow-deprecated-apis': True,
                 'allow_bad_gossip': True,
                 'broken_log': '.*',
-                'dev-bitcoind-poll': 3,
+                'dev-palladiumd-poll': 3,
             }.copy()
             for i in range(2)
         ]
@@ -1396,7 +1396,7 @@ def generate_channels_examples(node_factory, bitcoind, l1, l3, l4, l5):
                 'allow-deprecated-apis': True,
                 'allow_bad_gossip': True,
                 'broken_log': '.*',
-                'dev-bitcoind-poll': 3,
+                'dev-palladiumd-poll': 3,
             }.copy()
             for i in range(2)
         ]
@@ -1446,7 +1446,7 @@ def generate_channels_examples(node_factory, bitcoind, l1, l3, l4, l5):
                 'allow-deprecated-apis': True,
                 'allow_bad_gossip': True,
                 'broken_log': '.*',
-                'dev-bitcoind-poll': 3,
+                'dev-palladiumd-poll': 3,
             }.copy()
             for i in range(2)
         ]
