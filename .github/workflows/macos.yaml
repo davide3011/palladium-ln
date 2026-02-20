@@ -9,21 +9,18 @@ jobs:
     timeout-minutes: 120
     strategy:
       fail-fast: true
-      matrix:
-        bitcoind-version: ["27.1"]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Download Bitcoin ${{ matrix.bitcoind-version }} & install binaries
+      - name: Download Palladium & install binaries
         run: |
-          export BITCOIND_VERSION=${{ matrix.bitcoind-version }}
-          export TARGET_ARCH="arm64-apple-darwin"
-
-          wget https://bitcoincore.org/bin/bitcoin-core-${BITCOIND_VERSION}/bitcoin-${BITCOIND_VERSION}-${TARGET_ARCH}.tar.gz
-          tar -xzf bitcoin-${BITCOIND_VERSION}-${TARGET_ARCH}.tar.gz
-          sudo mv bitcoin-${BITCOIND_VERSION}/bin/* /usr/local/bin
-          rm -rf bitcoin-${BITCOIND_VERSION}-${TARGET_ARCH}.tar.gz bitcoin-${BITCOIND_VERSION}
+          wget https://github.com/palladium-coin/palladiumcore/releases/latest/download/palladium-arm64-apple-darwin.tar.gz
+          tar -xzf palladium-arm64-apple-darwin.tar.gz
+          cd arm64-apple-darwin
+          sudo mv palladium* /usr/local/bin
+          cd ..
+          rm -rf arm64-apple-darwin palladium-arm64-apple-darwin.tar.gz
 
       - name: Set up Python 3.10
         uses: actions/setup-python@v5
@@ -52,15 +49,15 @@ jobs:
           uv run ./configure --disable-valgrind --disable-compat
           uv run make
 
-      - name: Start bitcoind in regtest mode
+      - name: Start palladiumd in regtest mode
         run: |
-          bitcoind -regtest -daemon
+          palladiumd -regtest -daemon
           sleep 5
 
       - name: Generate initial block
         run: |
-          bitcoin-cli -regtest createwallet default_wallet
-          bitcoin-cli -regtest generatetoaddress 1 $(bitcoin-cli -regtest getnewaddress)
+          palladium-cli -regtest createwallet default_wallet
+          palladium-cli -regtest generatetoaddress 1 $(palladium-cli -regtest getnewaddress)
           sleep 2
 
       - name: Start CLN in regtest mode

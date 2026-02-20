@@ -279,10 +279,10 @@ jobs:
         run: |
           bash -x .github/scripts/setup.sh
 
-      - name: Install bitcoind
+      - name: Install palladiumd
         env:
           TEST_NETWORK: ${{ matrix.TEST_NETWORK }}
-        run: .github/scripts/install-bitcoind.sh
+        run: .github/scripts/install-palladiumd.sh
 
       - name: Download build
         uses: actions/download-artifact@v4
@@ -399,10 +399,10 @@ jobs:
         run: |
           bash -x .github/scripts/setup.sh
 
-      - name: Install bitcoind
+      - name: Install palladiumd
         env:
           TEST_NETWORK: ${{ matrix.TEST_NETWORK }}
-        run: .github/scripts/install-bitcoind.sh
+        run: .github/scripts/install-palladiumd.sh
 
       - name: Download build
         uses: actions/download-artifact@v4
@@ -509,8 +509,8 @@ jobs:
           sudo apt-get install -yyq valgrind
           bash -x .github/scripts/setup.sh
 
-      - name: Install bitcoind
-        run: .github/scripts/install-bitcoind.sh
+      - name: Install palladiumd
+        run: .github/scripts/install-palladiumd.sh
 
       - name: Download build
         uses: actions/download-artifact@v4
@@ -602,8 +602,8 @@ jobs:
         run: |
           bash -x .github/scripts/setup.sh
 
-      - name: Install bitcoind
-        run: .github/scripts/install-bitcoind.sh
+      - name: Install palladiumd
+        run: .github/scripts/install-palladiumd.sh
 
       - name: Download build
         uses: actions/download-artifact@v4
@@ -654,10 +654,10 @@ jobs:
       - name: Install dependencies
         run: |
           bash -x .github/scripts/setup.sh
-      - name: Install bitcoind
+      - name: Install palladiumd
         env:
           TEST_NETWORK: regtest
-        run: .github/scripts/install-bitcoind.sh
+        run: .github/scripts/install-palladiumd.sh
       - name: Download build
         uses: actions/download-artifact@v4
         with:
@@ -711,17 +711,8 @@ jobs:
         run: |
           bash -x .github/scripts/setup.sh
 
-      - name: Download Bitcoin Core
-        run: wget "https://bitcoincore.org/bin/bitcoin-core-${{ matrix.MIN_BTC_VERSION }}/bitcoin-${{ matrix.MIN_BTC_VERSION }}-x86_64-linux-gnu.tar.gz"
-
-      - name: Extract Bitcoin Core
-        run: tar -xf "bitcoin-${{ matrix.MIN_BTC_VERSION }}-x86_64-linux-gnu.tar.gz"
-
-      - name: Move Bitcoin Core Binaries
-        run: sudo mv bitcoin-${{ matrix.MIN_BTC_VERSION }}/bin/* /usr/local/bin/
-
-      - name: Clean Up Downloaded Bitcoin
-        run: rm -rf "bitcoin-${{ matrix.MIN_BTC_VERSION }}-x86_64-linux-gnu.tar.gz" "bitcoin-${{ matrix.MIN_BTC_VERSION }}"
+      - name: Download Palladium Core
+        run: .github/scripts/install-palladiumd.sh
 
       - name: Download build
         uses: actions/download-artifact@v4

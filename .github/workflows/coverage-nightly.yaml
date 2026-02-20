@@ -74,7 +74,7 @@ jobs:
         run: bash -x .github/scripts/setup.sh
 
       - name: Install Bitcoin Core
-        run: bash -x .github/scripts/install-bitcoind.sh
+        run: bash -x .github/scripts/install-palladiumd.sh
 
       - name: Download build artifact
         uses: actions/download-artifact@v4
