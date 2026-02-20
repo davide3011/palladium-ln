@@ -30,7 +30,7 @@
 
 # We've got a legacy problem is that PATH_TO_LIGHTNING is the
 # path to the lightningd / lightning-cli and PATH_TO_BITCOIN
-# is the path to the bitcoin data dir. These are not the same
+# is the path to the palladium data dir. These are not the same
 # things (data directories vs binary locations).
 # Ideally we'd let users set each of these four
 # things independently. Unless we rename stuff, this going to
@@ -43,8 +43,8 @@ if [ -n "$PATH_TO_LIGHTNING" ]; then
     return 1
 fi
 
-if [ -n "$PATH_TO_BITCOIN" ]; then
-    echo PATH_TO_BITCOIN is no longer supported, please use BITCOIN_DIR
+if [ -n "$PATH_TO_PALLADIUM" ]; then
+    echo PATH_TO_PALLADIUM is no longer supported, please use PALLADIUM_DIR
     return 1
 fi
 
@@ -82,36 +82,44 @@ if [ -z "$LIGHTNING_DIR" ]; then
     LIGHTNING_DIR=/tmp
 fi
 
-if [ -z "$BITCOIN_DIR" ]; then
-	if [ -d "$HOME/snap/bitcoin-core/common/.bitcoin" ]; then
-		BITCOIN_DIR="$HOME/snap/bitcoin-core/common/.bitcoin"
-	elif [ -d "$HOME/.bitcoin" ]; then
-		BITCOIN_DIR="$HOME/.bitcoin"
-	elif [ -d "$HOME/Library/Application Support/Bitcoin/" ]; then
-		BITCOIN_DIR="$HOME/Library/Application Support/Bitcoin/"
+if [ -z "$PALLADIUM_DIR" ]; then
+	if [ -d "$HOME/snap/palladium-core/common/.palladium" ]; then
+		PALLADIUM_DIR="$HOME/snap/palladium-core/common/.palladium"
+	elif [ -d "$HOME/.palladium" ]; then
+		PALLADIUM_DIR="$HOME/.palladium"
+	elif [ -d "$HOME/Library/Application Support/Palladium/" ]; then
+		PALLADIUM_DIR="$HOME/Library/Application Support/Palladium/"
 	else
-		echo "\$BITCOIN_DIR not set to a .bitcoin dir?" >&2
+		echo "\$PALLADIUM_DIR not set to a .palladium dir?" >&2
 		return
 	fi
 fi
 
-# shellcheck disable=SC2153
-if [ -z "$BITCOIN_BIN" ]; then
-	# Already installed maybe?  Prints
-	if ! type bitcoin-cli >/dev/null 2>&1 ; then
-		echo bitcoin-cli: not found
-		return 1
+if [ -z "$PALLADIUM_BIN" ]; then
+	# Check if the user placed the binaries in palladium-bin
+	if [ -x "$(pwd)/palladium-bin/palladium-cli" ] && [ -x "$(pwd)/palladium-bin/palladiumd" ]; then
+		PALLADIUM_BIN="$(pwd)/palladium-bin"
+		BCLI="$PALLADIUM_BIN/palladium-cli"
+		BITCOIND="$PALLADIUM_BIN/palladiumd"
+	else
+		# Already installed maybe?  Prints
+		if ! type palladium-cli >/dev/null 2>&1 ; then
+			echo palladium-cli: not found
+			return 1
+		fi
+		if ! type palladiumd >/dev/null 2>&1 ; then
+			echo palladiumd: not found
+			return 1
+		fi
+		BCLI=palladium-cli
+		BITCOIND=palladiumd
 	fi
-	if ! type bitcoind >/dev/null 2>&1 ; then
-		echo bitcoind: not found
-		return 1
-	fi
-	BCLI=bitcoin-cli
-	BITCOIND=bitcoind
 else
-    BCLI="$BITCOIN_BIN"/bitcoin-cli
-    BITCOIND="$BITCOIN_BIN"/bitcoind
+    BCLI="$PALLADIUM_BIN"/palladium-cli
+    BITCOIND="$PALLADIUM_BIN"/palladiumd
 fi
+
+export PATH="$PALLADIUM_BIN:$PATH"
 
 
 echo lightning-cli is "$LCLI"
@@ -121,12 +129,12 @@ export LCLI="$LCLI"
 export LIGHTNINGD="$LIGHTNINGD"
 export LIGHTNING_DIR="$LIGHTNING_DIR"
 
-echo bitcoin-cli is "$BCLI"
-echo bitcoind is "$BITCOIND"
-echo bitcoin-dir is "$BITCOIN_DIR"
+echo palladium-cli is "$BCLI"
+echo palladiumd is "$BITCOIND"
+echo palladium-dir is "$PALLADIUM_DIR"
 export BCLI="$BCLI"
 export BITCOIND="$BITCOIND"
-export BITCOIN_DIR="$BITCOIN_DIR"
+export PALLADIUM_DIR="$PALLADIUM_DIR"
 
 wait_for_lightningd() {
 	if [ -z "$1" ]; then
@@ -223,7 +231,7 @@ funder-lease-requests-only=false
 
 		# Start the lightning nodes
 		test -f "$LIGHTNING_DIR/l$i/lightningd-$network.pid" || \
-			$EATMYDATA "$LIGHTNINGD" "--network=$network" "--lightning-dir=$LIGHTNING_DIR/l$i" "--bitcoin-datadir=$BITCOIN_DIR" "--database-upgrade=true" &
+			$EATMYDATA "$LIGHTNINGD" "--network=$network" "--lightning-dir=$LIGHTNING_DIR/l$i" "--palladium-datadir=$PALLADIUM_DIR" "--palladium-cli=$BCLI" "--database-upgrade=true" &
 		# shellcheck disable=SC2139 disable=SC2086
 		alias l$i-cli="$LCLI --lightning-dir=$LIGHTNING_DIR/l$i"
 		# shellcheck disable=SC2139 disable=SC2086
@@ -243,31 +251,31 @@ funder-lease-requests-only=false
 
 start_ln() {
 	# Start bitcoind in the background
-	test -f "$BITCOIN_DIR/regtest/bitcoind.pid" || \
-		"$BITCOIND" -datadir="$BITCOIN_DIR" -regtest -txindex -fallbackfee=0.00000253 -daemon
+	test -f "$PALLADIUM_DIR/regtest/palladiumd.pid" || \
+		"$BITCOIND" -datadir="$PALLADIUM_DIR" -regtest -txindex -fallbackfee=0.00000253 -daemon
 
 	# Wait for it to start.
-	while ! "$BCLI" -datadir="$BITCOIN_DIR" -regtest ping 2> /dev/null; do echo "awaiting bitcoind..." && sleep 1; done
+	while ! "$BCLI" -datadir="$PALLADIUM_DIR" -regtest ping 2> /dev/null; do echo "awaiting palladiumd..." && sleep 1; done
 
 	# Check if default wallet exists
-	if ! "$BCLI" -datadir="$BITCOIN_DIR" -regtest listwalletdir | jq -r '.wallets[] | .name' | grep -wqe 'default' ; then
+	if ! "$BCLI" -datadir="$PALLADIUM_DIR" -regtest listwalletdir | jq -r '.wallets[] | .name' | grep -wqe 'default' ; then
 		# wallet dir does not exist, create one
 		echo "Making \"default\" bitcoind wallet."
-		"$BCLI" -datadir="$BITCOIN_DIR" -regtest createwallet default >/dev/null 2>&1
+		"$BCLI" -datadir="$PALLADIUM_DIR" -regtest createwallet default >/dev/null 2>&1
 	fi
 
 	# Check if default wallet is loaded
-	if ! "$BCLI" -datadir="$BITCOIN_DIR" -regtest listwallets | jq -r '.[]' | grep -wqe 'default' ; then
-		echo "Loading \"default\" bitcoind wallet."
-		"$BCLI" -datadir="$BITCOIN_DIR" -regtest loadwallet default >/dev/null 2>&1
+	if ! "$BCLI" -datadir="$PALLADIUM_DIR" -regtest listwallets | jq -r '.[]' | grep -wqe 'default' ; then
+		echo "Loading \"default\" palladiumd wallet."
+		"$BCLI" -datadir="$PALLADIUM_DIR" -regtest loadwallet default >/dev/null 2>&1
 	fi
 
 	# Kick it out of initialblockdownload if necessary
-	if "$BCLI" -datadir="$BITCOIN_DIR" -regtest getblockchaininfo | grep -q 'initialblockdownload.*true'; then
-		"$BCLI" -datadir="$BITCOIN_DIR" -regtest generatetoaddress 1 "$($BCLI -datadir="$BITCOIN_DIR" -regtest getnewaddress)" > /dev/null
+	if "$BCLI" -datadir="$PALLADIUM_DIR" -regtest getblockchaininfo | grep -q 'initialblockdownload.*true'; then
+		"$BCLI" -datadir="$PALLADIUM_DIR" -regtest -rpcwallet=default generatetoaddress 1 "$($BCLI -datadir="$PALLADIUM_DIR" -regtest -rpcwallet=default getnewaddress)" > /dev/null
 	fi
 
-	alias bt-cli='"$BCLI" -datadir="$BITCOIN_DIR" -regtest'
+	alias bt-cli='"$BCLI" -datadir="$PALLADIUM_DIR" -regtest'
 
 	if [ -z "$1" ]; then
 		nodes=2
@@ -278,29 +286,31 @@ start_ln() {
 	echo "	bt-cli, stop_ln, fund_nodes"
 
 	wait_for_lightningd "$nodes"
-	active_status=$(clnrest_status "$LIGHTNING_DIR/l1/log")
-	if has_clnrest && [ "$active_status" = "active" ] ; then
-		node_info regtest
-	elif [ "$active_status" = "disabled" ]; then
-		echo "clnrest is disabled."
-	else
-		echo "timed out parsing log $LIGHTNING_DIR/l1/log"
+	if has_clnrest; then
+		active_status=$(clnrest_status "$LIGHTNING_DIR/l1/log")
+		if [ "$active_status" = "active" ] ; then
+			node_info regtest
+		elif [ "$active_status" = "disabled" ]; then
+			echo "clnrest is disabled."
+		else
+			echo "timed out parsing log $LIGHTNING_DIR/l1/log"
+		fi
 	fi
 }
 
 ensure_bitcoind_funds() {
 
 	if [ -z "$ADDRESS" ]; then
-		ADDRESS=$("$BCLI" -datadir="$BITCOIN_DIR" -regtest "$WALLET" getnewaddress)
+		ADDRESS=$("$BCLI" -datadir="$PALLADIUM_DIR" -regtest "$WALLET" getnewaddress)
 	fi
 
-	balance=$("$BCLI" -datadir="$BITCOIN_DIR" -regtest "$WALLET" getbalance)
+	balance=$("$BCLI" -datadir="$PALLADIUM_DIR" -regtest "$WALLET" getbalance)
 
 	if [ 1 -eq "$(echo "$balance"'<1' | bc -l)" ]; then
 
 		printf "%s" "Mining into address " "$ADDRESS""... "
 
-		"$BCLI" -datadir="$BITCOIN_DIR" -regtest generatetoaddress 100 "$ADDRESS" > /dev/null
+		"$BCLI" -datadir="$PALLADIUM_DIR" -regtest generatetoaddress 100 "$ADDRESS" > /dev/null
 
 		echo "done."
 	fi
@@ -327,11 +337,11 @@ fund_nodes() {
 
 	WALLET="-rpcwallet=$WALLET"
 
-	ADDRESS=$("$BCLI" -datadir="$BITCOIN_DIR" -regtest "$WALLET" getnewaddress)
+	ADDRESS=$("$BCLI" -datadir="$PALLADIUM_DIR" -regtest "$WALLET" getnewaddress)
 
 	ensure_bitcoind_funds
 
-	echo "bitcoind balance:" "$("$BCLI" -datadir="$BITCOIN_DIR" -regtest "$WALLET" getbalance)"
+	echo "palladiumd balance:" "$("$BCLI" -datadir="$PALLADIUM_DIR" -regtest "$WALLET" getbalance)"
 
 	last_node=""
 
@@ -356,10 +366,10 @@ fund_nodes() {
 
 		ensure_bitcoind_funds
 
-		"$BCLI" -datadir="$BITCOIN_DIR" -regtest "$WALLET" sendtoaddress "$L1_WALLET_ADDR" 1 > /dev/null
-		"$BCLI" -datadir="$BITCOIN_DIR" -regtest "$WALLET" sendtoaddress "$L2_WALLET_ADDR" 1 > /dev/null
+		"$BCLI" -datadir="$PALLADIUM_DIR" -regtest "$WALLET" sendtoaddress "$L1_WALLET_ADDR" 1 > /dev/null
+		"$BCLI" -datadir="$PALLADIUM_DIR" -regtest "$WALLET" sendtoaddress "$L2_WALLET_ADDR" 1 > /dev/null
 
-		"$BCLI" -datadir="$BITCOIN_DIR" -regtest generatetoaddress 1 "$ADDRESS" > /dev/null
+		"$BCLI" -datadir="$PALLADIUM_DIR" -regtest generatetoaddress 1 "$ADDRESS" > /dev/null
 
 		printf "%s" "Waiting for lightning node funds... "
 
@@ -379,7 +389,7 @@ fund_nodes() {
 
 		"$LCLI" --lightning-dir="$LIGHTNING_DIR"/l"$node1" fundchannel "$L2_NODE_ID" 1000000 > /dev/null
 
-		"$BCLI" -datadir="$BITCOIN_DIR" -regtest generatetoaddress 6 "$ADDRESS" > /dev/null
+		"$BCLI" -datadir="$PALLADIUM_DIR" -regtest generatetoaddress 6 "$ADDRESS" > /dev/null
 
 		printf "%s" "Waiting for confirmation... "
 
@@ -408,9 +418,9 @@ stop_nodes() {
 
 stop_ln() {
 	stop_nodes "$@"
-	test ! -f "$BITCOIN_DIR/regtest/bitcoind.pid" || \
-		(kill "$(cat "$BITCOIN_DIR/regtest/bitcoind.pid")"; \
-		rm "$BITCOIN_DIR/regtest/bitcoind.pid")
+	test ! -f "$PALLADIUM_DIR/regtest/palladiumd.pid" || \
+		(kill "$(cat "$PALLADIUM_DIR/regtest/palladiumd.pid")"; \
+		rm "$PALLADIUM_DIR/regtest/palladiumd.pid")
 
 	unset LN_NODES
 	unalias bt-cli

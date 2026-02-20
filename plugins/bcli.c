@@ -23,10 +23,10 @@
 #define BITCOIND_VERSION_GETBLOCKFROMPEER 230000
 
 struct bitcoind {
-	/* eg. "bitcoin-cli" */
+	/* eg. "palladium-cli" */
 	char *cli;
 
-	/* -datadir arg for bitcoin-cli. */
+	/* -datadir arg for palladium-cli. */
 	char *datadir;
 
 	/* bitcoind's version, used for compatibility checks. */
@@ -36,7 +36,7 @@ struct bitcoind {
 	 * before fatally exiting. */
 	u64 retry_timeout;
 
-	/* Passthrough parameters for bitcoin-cli */
+	/* Passthrough parameters for palladium-cli */
 	char *rpcuser, *rpcpass, *rpcconnect, *rpcport;
 	u64 rpcclienttimeout;
 
@@ -52,7 +52,7 @@ struct bitcoind {
 
 static struct bitcoind *bitcoind;
 
-/* Result of a synchronous bitcoin-cli call */
+/* Result of a synchronous palladium-cli call */
 struct bcli_result {
 	char *output;
 	size_t output_len;
@@ -155,7 +155,7 @@ static char *args_string(const tal_t *ctx, const char **args, const char **stdin
 	return ret;
 }
 
-/* Execute bitcoin-cli with pre-built command and optional stdin args.
+/* Execute palladium-cli with pre-built command and optional stdin args.
  * Returns result with output and exit status. */
 static struct bcli_result *
 execute_bitcoin_cli(const tal_t *ctx,
@@ -209,7 +209,7 @@ execute_bitcoin_cli(const tal_t *ctx,
 	return res;
 }
 
-/* Synchronous execution of bitcoin-cli.
+/* Synchronous execution of palladium-cli.
  * Returns result with output and exit status. */
 static struct bcli_result *
 run_bitcoin_cliv(const tal_t *ctx,
@@ -581,7 +581,7 @@ static struct command_result *get_feerate(struct command *cmd,
 		if (bitcoind->fake_fees)
 			*perkb = 1000;
 		else
-			/* We return null if estimation failed, and bitcoin-cli will
+			/* We return null if estimation failed, and palladium-cli will
 			 * exit with 0 but no feerate field on failure. */
 			return estimatefees_null_response(cmd);
 	}
@@ -643,7 +643,7 @@ static struct command_result *sendrawtransaction(struct command *cmd,
 	struct bcli_result *res;
 	struct json_stream *response;
 
-	/* bitcoin-cli wants strings. */
+	/* palladium-cli wants strings. */
 	if (!param(cmd, buf, toks,
 	           p_req("tx", param_string, &tx),
 		   p_req("allowhighfees", param_bool, &allowhighfees),
@@ -688,7 +688,7 @@ static struct command_result *getutxout(struct command *cmd,
 	struct bitcoin_tx_output output;
 	const char *err;
 
-	/* bitcoin-cli wants strings. */
+	/* palladium-cli wants strings. */
 	if (!param(cmd, buf, toks,
 	           p_req("txid", param_string, &txid),
 	           p_req("vout", param_string, &vout),
@@ -730,15 +730,15 @@ static void bitcoind_failure(struct plugin *p, const char *error_message)
 {
 	const char **cmd = gather_args(bitcoind, NULL, "echo", NULL);
 	plugin_err(p, "\n%s\n\n"
-		      "Make sure you have bitcoind running and that bitcoin-cli"
-		      " is able to connect to bitcoind.\n\n"
+		      "Make sure you have palladiumd running and that palladium-cli"
+		      " is able to connect to palladiumd.\n\n"
 		      "You can verify that your Bitcoin Core installation is"
 		      " ready for use by running:\n\n"
 		      "    $ %s 'hello world'\n", error_message,
 		   args_string(cmd, cmd, NULL));
 }
 
-/* Do some sanity checks on bitcoind based on the output of `getnetworkinfo`. */
+/* Do some sanity checks on palladiumd based on the output of `getnetworkinfo`. */
 static void parse_getnetworkinfo_result(struct plugin *p, const char *buf)
 {
 	const jsmntok_t *result;
@@ -764,13 +764,13 @@ static void parse_getnetworkinfo_result(struct plugin *p, const char *buf)
 			   json_tok_full_len(result), json_tok_full(buf, result));
 
 	if (bitcoind->version < min_version)
-		plugin_err(p, "Unsupported bitcoind version %"PRIu32", at least"
+		plugin_err(p, "Unsupported palladiumd version %"PRIu32", at least"
 			      " %"PRIu32" required.", bitcoind->version, min_version);
 
 	/* We don't support 'blocksonly', as we rely on transaction relay for fee
 	 * estimates. */
 	if (!tx_relay)
-		plugin_err(p, "The 'blocksonly' mode of bitcoind, or any option "
+		plugin_err(p, "The 'blocksonly' mode of palladiumd, or any option "
 			      "deactivating transaction relay is not supported.");
 
 	tal_free(result);
@@ -782,15 +782,15 @@ static void wait_and_check_bitcoind(struct plugin *p)
 	const char **cmd;
 
 	/* Special case: -rpcwait flags go on command line, not stdin */
-	cmd = gather_args(bitcoind, NULL, "-rpcwait", "-rpcwaittimeout=30",
+	cmd = gather_args(bitcoind, NULL, "-rpcwait",
 			  "getnetworkinfo", NULL);
 	res = execute_bitcoin_cli(bitcoind, p, cmd, NULL);
 
 	if (res->exitstatus == 1)
 		bitcoind_failure(p,
 				 "RPC connection timed out. Could "
-				 "not connect to bitcoind using "
-				 "bitcoin-cli. Is bitcoind running?");
+				 "not connect to palladiumd using "
+				 "palladium-cli. Is palladiumd running?");
 	if (res->exitstatus != 0)
 		bitcoind_failure(p,
 				 tal_fmt(bitcoind, "%s exited with code %i: %s",
@@ -820,7 +820,7 @@ static const char *init(struct command *init_cmd, const char *buffer UNUSED,
 
 	plugin_set_memleak_handler(init_cmd->plugin, memleak_mark_bitcoind);
 	plugin_log(init_cmd->plugin, LOG_INFORM,
-		   "bitcoin-cli initialized and connected to bitcoind.");
+		   "palladium-cli initialized and connected to palladiumd.");
 
 	return NULL;
 }
@@ -878,37 +878,37 @@ int main(int argc, char *argv[])
 	plugin_main(argv, init, NULL, PLUGIN_STATIC, false /* Do not init RPC on startup*/,
 		    NULL, commands, ARRAY_SIZE(commands),
 		    NULL, 0, NULL, 0, NULL, 0,
-		    plugin_option("bitcoin-datadir",
+		    plugin_option("palladium-datadir",
 				  "string",
-				  "-datadir arg for bitcoin-cli",
+				  "-datadir arg for palladium-cli",
 				  charp_option, NULL, &bitcoind->datadir),
-		    plugin_option("bitcoin-cli",
+		    plugin_option("palladium-cli",
 				  "string",
-				  "bitcoin-cli pathname",
+				  "palladium-cli pathname",
 				  charp_option, NULL, &bitcoind->cli),
-		    plugin_option("bitcoin-rpcuser",
+		    plugin_option("palladium-rpcuser",
 				  "string",
-				  "bitcoind RPC username",
+				  "palladiumd RPC username",
 				  charp_option, NULL, &bitcoind->rpcuser),
-		    plugin_option("bitcoin-rpcpassword",
+		    plugin_option("palladium-rpcpassword",
 				  "string",
-				  "bitcoind RPC password",
+				  "palladiumd RPC password",
 				  charp_option, NULL, &bitcoind->rpcpass),
-		    plugin_option("bitcoin-rpcconnect",
+		    plugin_option("palladium-rpcconnect",
 				  "string",
-				  "bitcoind RPC host to connect to",
+				  "palladiumd RPC host to connect to",
 				  charp_option, NULL, &bitcoind->rpcconnect),
-		    plugin_option("bitcoin-rpcport",
+		    plugin_option("palladium-rpcport",
 				  "int",
-				  "bitcoind RPC host's port",
+				  "palladiumd RPC host's port",
 				  charp_option, NULL, &bitcoind->rpcport),
-		    plugin_option("bitcoin-rpcclienttimeout",
+		    plugin_option("palladium-rpcclienttimeout",
 				  "int",
-				  "bitcoind RPC timeout in seconds during HTTP requests",
+				  "palladiumd RPC timeout in seconds during HTTP requests",
 				  u64_option, u64_jsonfmt, &bitcoind->rpcclienttimeout),
-		    plugin_option("bitcoin-retry-timeout",
+		    plugin_option("palladium-retry-timeout",
 				  "int",
-				  "how long to keep retrying to contact bitcoind"
+				  "how long to keep retrying to contact palladiumd"
 				  " before fatally exiting",
 				  u64_option, u64_jsonfmt, &bitcoind->retry_timeout),
 		    plugin_option_dev("dev-no-fake-fees",

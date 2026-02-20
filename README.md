@@ -19,6 +19,10 @@ Palladium Lightning aims to be lightweight, highly customizable, and fully compl
 
 To compile the source code, please refer to the updated instructions or refer to the original installation documentation available in `doc/getting-started/getting-started/installation.md`.
 
+## Testing
+
+For instructions on how to test Palladium Lightning against a local Palladium Regtest network, please refer to the dedicated guide: **[TESTING_PALLADIUM.md](TESTING_PALLADIUM.md)**.
+
 ## License
 
 The code is released under the BSD-MIT License. See the [LICENSE](LICENSE) file for more details.

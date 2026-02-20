@@ -451,7 +451,7 @@ class SimpleBitcoinProxy:
 
 class BitcoinD(TailableProc):
 
-    def __init__(self, bitcoin_dir="/tmp/bitcoind-test", rpcport=None):
+    def __init__(self, bitcoin_dir="/tmp/palladiumd-test", rpcport=None):
         TailableProc.__init__(self, bitcoin_dir, verbose=False)
 
         if rpcport is None:
@@ -462,7 +462,7 @@ class BitcoinD(TailableProc):
 
         self.bitcoin_dir = bitcoin_dir
         self.rpcport = rpcport
-        self.prefix = 'bitcoind'
+        self.prefix = 'palladiumd'
         self.canned_blocks = None
 
         regtestdir = os.path.join(bitcoin_dir, 'regtest')
@@ -743,7 +743,7 @@ class LightningD(TailableProc):
             'bitcoin-rpcpassword': BITCOIND_CONFIG['rpcpassword'],
 
             # Make sure we don't touch any existing config files in the user's $HOME
-            'bitcoin-datadir': lightning_dir,
+            'palladium-datadir': lightning_dir,
         }
 
         for k, v in opts.items():
@@ -1163,7 +1163,7 @@ class LightningNode(object):
     def is_synced_with_bitcoin(self, info=None):
         if info is None:
             info = self.rpc.getinfo()
-        return 'warning_bitcoind_sync' not in info and 'warning_lightningd_sync' not in info
+        return 'warning_palladiumd_sync' not in info and 'warning_lightningd_sync' not in info
 
     def start(self, wait_for_bitcoind_sync=True, stderr_redir=False):
         # If we have a disconnect string, dump it to a file for daemon.

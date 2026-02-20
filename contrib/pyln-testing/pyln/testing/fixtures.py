@@ -1,6 +1,6 @@
 from concurrent import futures
 from pyln.testing.db import SqliteDbProvider, PostgresDbProvider
-from pyln.testing.utils import NodeFactory, BitcoinD, ElementsD, env, LightningNode, TEST_DEBUG, TEST_NETWORK, SLOW_MACHINE, VALGRIND
+from pyln.testing.utils import NodeFactory, PalladiumD, ElementsD, env, LightningNode, TEST_DEBUG, TEST_NETWORK, SLOW_MACHINE, VALGRIND
 from pyln.client import Millisatoshi
 from typing import Dict
 from pathlib import Path
@@ -117,7 +117,7 @@ def test_name(request):
 
 
 network_daemons = {
-    'regtest': BitcoinD,
+    'regtest': PalladiumD,
     'liquid-regtest': ElementsD,
 }
 
