@@ -27,6 +27,9 @@ cli/lightning-cli
 # Custom local binaries for testing
 /palladium-bin/
 
+# Local secrets — never commit
+.env
+
 coverage
 # Coverage profiling data files
 *.profraw
