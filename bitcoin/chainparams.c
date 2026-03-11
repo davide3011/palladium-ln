@@ -30,12 +30,22 @@ const struct chainparams networks[] = {
      .onchain_hrp = "plm",
      .lightning_hrp = "plm",
      .bip70_name = "main",
+     /* genesis = 000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f
+      * (same as Bitcoin mainnet - Palladium kept the original genesis block)
+      *
+      * OPERATIONAL NOTES FOR PALLADIUM MAINNET:
+      * - Resilience Fork at block 340,000: block target changes from 10 min to 2 min.
+      *   Operators should tune --cltv-expiry-delta and --cltv-final accordingly.
+      *   Default cltv_expiry_delta=14 blocks ≈ 28 min (was 140 min on Bitcoin).
+      * - Taproot (BIP341) activates via BIP9 (bit 2), window opens Feb 14 2026.
+      *   On regtest Taproot is ALWAYS_ACTIVE. Anchor/Taproot channels work
+      *   on regtest immediately; on mainnet only after BIP9 lock-in. */
      .genesis_blockhash = {{{.u.u8 = {0x6f, 0xe2, 0x8c, 0x0a, 0xb6, 0xf1, 0xb3,
 				      0x72, 0xc1, 0xa6, 0xa2, 0x46, 0xae, 0x63,
 				      0xf7, 0x4f, 0x93, 0x1e, 0x83, 0x65, 0xe1,
 				      0x5a, 0x08, 0x9c, 0x68, 0xd6, 0x19, 0x00,
 				      0x00, 0x00, 0x00, 0x00}}}},
-     .rpc_port = 2333,
+     .rpc_port = 2332,
      .ln_port = 9735,
      .cli = "palladium-cli",
      .cli_args = NULL,
@@ -50,14 +60,41 @@ const struct chainparams networks[] = {
      .max_funding = AMOUNT_SAT_INIT((1 << 24) - 1),
      .max_payment = AMOUNT_MSAT_INIT(0xFFFFFFFFULL),
      .max_supply = AMOUNT_SAT_INIT(2100000000000000),
-     /* "Lightning Charge Powers Developers & Blockstream Store" */
-     .when_lightning_became_cool = 504500,
+     .when_lightning_became_cool = 1,
      .p2pkh_version = 55,
      .p2sh_version = 5,
      .testnet = false,
      .fee_asset_tag = NULL,
      .bip32_key_version = {.bip32_pubkey_version = BIP32_VER_MAIN_PUBLIC,
 			   .bip32_privkey_version = BIP32_VER_MAIN_PRIVATE},
+     .is_elements = false},
+    {.network_name = "testnet",
+     .onchain_hrp = "tplm",
+     .lightning_hrp = "tplm",
+     .bip70_name = "test",
+     /* genesis = 000000000933ea01ad0ee984209779baaec3ced90fa3f408719526f8d77f4943
+      * (same as Bitcoin testnet - Palladium kept the original testnet genesis block) */
+     .genesis_blockhash = {{{.u.u8 = {0x43, 0x49, 0x7f, 0xd7, 0xf8, 0x26, 0x95,
+				      0x71, 0x08, 0xf4, 0xa3, 0x0f, 0xd9, 0xce,
+				      0xc3, 0xae, 0xba, 0x79, 0x97, 0x20, 0x84,
+				      0xe9, 0x0e, 0xad, 0x01, 0xea, 0x33, 0x09,
+				      0x00, 0x00, 0x00, 0x00}}}},
+     .rpc_port = 12332,
+     .ln_port = 19735,
+     .cli = "palladium-cli",
+     .cli_args = "-testnet",
+     .cli_min_supported_version = 150000,
+     .dust_limit = { 546 },
+     .max_funding = AMOUNT_SAT_INIT((1 << 24) - 1),
+     .max_payment = AMOUNT_MSAT_INIT(0xFFFFFFFFULL),
+     .max_supply = AMOUNT_SAT_INIT(2100000000000000),
+     .when_lightning_became_cool = 1,
+     .p2pkh_version = 127,
+     .p2sh_version = 115,
+     .testnet = true,
+     .fee_asset_tag = NULL,
+     .bip32_key_version = {.bip32_pubkey_version = BIP32_VER_TEST_PUBLIC,
+			   .bip32_privkey_version = BIP32_VER_TEST_PRIVATE},
      .is_elements = false},
     {.network_name = "regtest",
      .onchain_hrp = "rplm",
@@ -68,7 +105,7 @@ const struct chainparams networks[] = {
 				      0x5b, 0xbf, 0x28, 0xc3, 0x4f, 0x3a, 0x5e,
 				      0x33, 0x2a, 0x1f, 0xc7, 0xb2, 0xb7, 0x3c,
 				      0xf1, 0x88, 0x91, 0x0f}}}},
-     .rpc_port = 28444,
+     .rpc_port = 12443,
      .ln_port = 19846,
      .cli = "palladium-cli",
      .cli_args = "-regtest",

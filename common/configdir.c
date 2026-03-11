@@ -340,8 +340,8 @@ struct configvar **initial_config_opts(const tal_t *ctx,
 			       "Set base directory: network-specific subdirectory is under here");
 	opt_register_early_arg("--network", opt_set_network, opt_show_network,
 			       NULL,
-			       "Select the network parameters (bitcoin, testnet,"
-			       " signet, or regtest)");
+			       "Select the network parameters (palladium, testnet,"
+			       " or regtest)");
 	opt_register_early_noarg("--testnet",
 				 opt_set_specific_network, "testnet",
 				 "Alias for --network=testnet");
@@ -353,7 +353,7 @@ struct configvar **initial_config_opts(const tal_t *ctx,
 				 "Alias for --network=signet");
 	opt_register_early_noarg("--mainnet",
 				 opt_set_specific_network, "palladium",
-				 "Alias for --network=bitcoin");
+				 "Alias for --network=palladium");
 	opt_register_early_noarg("--regtest",
 				 opt_set_specific_network, "regtest",
 				 "Alias for --network=regtest");

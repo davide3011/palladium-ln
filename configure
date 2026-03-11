@@ -538,8 +538,7 @@ else
 fi
 
 if ! check_command 'lowdown' lowdown; then
-    echo "*** We need lowdown!" >&2
-    exit 1
+    echo "WARNING: lowdown not found, man page generation will be skipped." >&2
 fi
 
 if echo | check_command sha256sum sha256sum; then

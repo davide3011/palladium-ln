@@ -2654,7 +2654,7 @@ json_openchannel_bump(struct command *cmd,
 	/* Ok, we're kosher to start.  Delay if not synced yet. */
 	if (!topology_synced(cmd->ld->topology)) {
 		json_notify_fmt(cmd, LOG_UNUSUAL,
-				"Waiting to sync with bitcoind network (block %u of %u)",
+				"Waiting to sync with palladiumd network (block %u of %u)",
 				get_block_height(cmd->ld->topology),
 				get_network_blockheight(cmd->ld->topology));
 
@@ -3287,7 +3287,7 @@ static struct command_result *json_openchannel_init(struct command *cmd,
 
 	if (!topology_synced(cmd->ld->topology)) {
 		json_notify_fmt(cmd, LOG_UNUSUAL,
-				"Waiting to sync with bitcoind network (block %u of %u)",
+				"Waiting to sync with palladiumd network (block %u of %u)",
 				get_block_height(cmd->ld->topology),
 				get_network_blockheight(cmd->ld->topology));
 

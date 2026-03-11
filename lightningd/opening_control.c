@@ -1456,7 +1456,7 @@ static struct command_result *json_fundchannel_start(struct command *cmd,
 			= tal(cmd, struct fundchannel_start_info);
 
 		json_notify_fmt(cmd, LOG_UNUSUAL,
-				"Waiting to sync with bitcoind network (block %u of %u)",
+				"Waiting to sync with palladiumd network (block %u of %u)",
 				get_block_height(cmd->ld->topology),
 				get_network_blockheight(cmd->ld->topology));
 

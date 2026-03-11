@@ -720,7 +720,7 @@ const u8 *send_htlc_out(const tal_t *ctx,
 	/* Note: we allow outgoing HTLCs before sync, for fast startup. */
 	if (!topology_synced(out->peer->ld->topology)) {
 		log_debug(out->log, "Sending HTLC while still syncing"
-			  " with bitcoin network (%u vs %u)",
+			  " with palladium network (%u vs %u)",
 			  get_block_height(out->peer->ld->topology),
 			  get_network_blockheight(out->peer->ld->topology));
 	}
@@ -2409,7 +2409,7 @@ void peer_got_commitsig(struct channel *channel, const u8 *msg)
 		return;
 	}
 
-	/* If we're not synced with bitcoin network, we can't accept
+	/* If we're not synced with palladium network, we can't accept
 	 * any new HTLCs.  We stall at this point, in the hope that it
 	 * won't take long! */
 	if (added && !topology_synced(ld->topology)) {
