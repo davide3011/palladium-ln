@@ -30,6 +30,9 @@ cli/lightning-cli
 # Local secrets — never commit
 .env
 
+# Lightning node data — contains hsm_secret and sensitive wallet data
+.lightning/
+
 coverage
 # Coverage profiling data files
 *.profraw
