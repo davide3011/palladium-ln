@@ -69,6 +69,8 @@ RUN apt-get update && \
         ca-certificates \
         inotify-tools \
         jq \
+        libboost-filesystem1.74.0 \
+        libevent-2.1-7 \
         libffi8 \
         libicu70 \
         libsodium23 \
