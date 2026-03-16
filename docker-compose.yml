@@ -1,18 +1,3 @@
-# Palladium Lightning — docker-compose
-#
-# Joins the existing `palladium-net` network created by the palladiumd compose stack.
-# The palladium-node:local image must be built before this one (palladium-cli is copied from it).
-#
-# Usage:
-#   # 1. Create .env with RPC credentials (see .env.example)
-#   # 2. Ensure palladiumd is running on palladium-net
-#   docker compose -f docker-compose.lightning.yml build
-#   docker compose -f docker-compose.lightning.yml up -d
-#
-#   # Check status
-#   docker logs palladium-lightning
-#   docker exec palladium-lightning lightning-cli --network=palladium getinfo
-
 networks:
   palladium-net:
     external: true  # created by the palladiumd compose stack
@@ -21,7 +6,7 @@ services:
   palladium-lightning:
     build:
       context: .
-      dockerfile: Dockerfile.palladium-lightning
+      dockerfile: Dockerfile
     image: palladium-lightning:local
     container_name: palladium-lightning
     restart: unless-stopped
