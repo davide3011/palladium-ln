@@ -205,7 +205,7 @@ start_nodes() {
 		allow-deprecated-apis=false
 		developer
 		dev-fast-gossip
-		dev-bitcoind-poll=5
+		dev-palladiumd-poll=5
 		experimental-dual-fund
 		experimental-splicing
 		funder-policy=match
@@ -231,7 +231,7 @@ funder-lease-requests-only=false
 
 		# Start the lightning nodes
 		test -f "$LIGHTNING_DIR/l$i/lightningd-$network.pid" || \
-			$EATMYDATA "$LIGHTNINGD" "--network=$network" "--lightning-dir=$LIGHTNING_DIR/l$i" "--palladium-datadir=$PALLADIUM_DIR" "--palladium-cli=$BCLI" "--database-upgrade=true" &
+			$EATMYDATA "$LIGHTNINGD" "--network=$network" "--lightning-dir=$LIGHTNING_DIR/l$i" "--palladium-datadir=$PALLADIUM_DIR" "--palladium-cli=$BCLI" "--database-upgrade=true" "--developer" &
 		# shellcheck disable=SC2139 disable=SC2086
 		alias l$i-cli="$LCLI --lightning-dir=$LIGHTNING_DIR/l$i"
 		# shellcheck disable=SC2139 disable=SC2086
