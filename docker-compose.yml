@@ -29,5 +29,6 @@ services:
       --palladium-rpcpassword=${PALLADIUM_RPCPASSWORD}
       --palladium-cli=/usr/local/bin/palladium-cli
       --log-level=info
+      --bind-addr=0.0.0.0:9735
       --announce-addr-discovered=true
       ${ANNOUNCE_DOMAIN:+--announce-addr=${ANNOUNCE_DOMAIN}}
