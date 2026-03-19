@@ -40,9 +40,9 @@ case "$cmd" in
         echo "==> On-chain balance"
         $CLI listfunds | jq '
             .outputs | {
-                total_sat:     (map(.amount_msat // 0) | add // 0) / 1000 | floor,
-                confirmed_sat: (map(select(.status=="confirmed") | .amount_msat // 0) | add // 0) / 1000 | floor,
-                unconfirmed_sat: (map(select(.status=="unconfirmed") | .amount_msat // 0) | add // 0) / 1000 | floor
+                total_sat:       ([.[].amount_msat // 0] | add // 0 | . / 1000 | floor),
+                confirmed_sat:   ([.[] | select(.status=="confirmed")   | .amount_msat // 0] | add // 0 | . / 1000 | floor),
+                unconfirmed_sat: ([.[] | select(.status=="unconfirmed") | .amount_msat // 0] | add // 0 | . / 1000 | floor)
             }'
 
         echo ""
@@ -51,8 +51,8 @@ case "$cmd" in
             .channels[] | {
                 peer_id,
                 state,
-                spendable_sat: (.spendable_msat // 0) / 1000 | floor,
-                receivable_sat: (.receivable_msat // 0) / 1000 | floor
+                spendable_sat:  ((.spendable_msat  // 0) | . / 1000 | floor),
+                receivable_sat: ((.receivable_msat // 0) | . / 1000 | floor)
             }' 2>/dev/null || echo "    (no channels)"
         ;;
 
