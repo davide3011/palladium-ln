@@ -4,6 +4,20 @@
 
 networkdatadir="${LIGHTNINGD_DATA}/${LIGHTNINGD_NETWORK}"
 
+# Auto-detect public IP
+# Tries three services in order; silently skips if all fail (node still works,
+# just won't announce an address until a peer connects inbound).
+if [ -z "${ANNOUNCE_DOMAIN:-}" ]; then
+    for url in "https://ifconfig.me" "https://api.ipify.org" "https://icanhazip.com"; do
+        detected_ip=$(curl -sf --max-time 5 "$url" 2>/dev/null | tr -d '[:space:]') || true
+        if echo "$detected_ip" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "Auto-detected public IP: $detected_ip"
+            set -- "$@" "--announce-addr=${detected_ip}"
+            break
+        fi
+    done
+fi
+
 set -m
 lightningd --network="${LIGHTNINGD_NETWORK}" "$@" &
 
