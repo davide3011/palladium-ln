@@ -2,7 +2,7 @@
 title: Troubleshooting & FAQ
 slug: faq
 content:
-  excerpt: Common issues and frequently asked questions on operating a CLN node.
+  excerpt: Common issues and frequently asked questions on operating a Palladium Lightning node.
 privacy:
   view: public
 ---
@@ -13,7 +13,7 @@ privacy:
 You can use the `listfunds` command and take a ratio of `our_amount_msat` over  
 `amount_msat`. Note that this doesn't account for the [channel reserve](https://github.com/lightning/bolts/blob/master/02-peer-protocol.md#rationale).
 
-A better option is to use the [`summary` plugin](https://github.com/lightningd/plugins/tree/master/summary) which nicely displays channel balances, along with other useful channel information.
+A better option is to use the `summary` plugin (install via `reckless install summary`) which nicely displays channel balances, along with other useful channel information.
 
 ### My channel is in state `STATE`, what does that mean ?
 
@@ -35,7 +35,7 @@ If you need a lot of inbound liquidity, you can use a service that trustlessly s
 
 ### Are there any issues if my node changes its IP address? What happens to the channels if it does?
 
-There is no risk to your channels if your IP address changes. Other nodes might not be able to connect to you, but your node can still connect to them. But Core Lightning also has an integrated IPv4/6 address discovery mechanism. If your node detects an new public address, it will update its announcement. For this to work behind a NAT router you need to forward the default TCP port 9735 to your node. IP discovery is only active if no other addresses are announced.
+There is no risk to your channels if your IP address changes. Other nodes might not be able to connect to you, but your node can still connect to them. But Palladium Lightning also has an integrated IPv4/6 address discovery mechanism. If your node detects an new public address, it will update its announcement. For this to work behind a NAT router you need to forward the default TCP port 9735 to your node. IP discovery is only active if no other addresses are announced.
 
 Alternatively, you can [setup a TOR hidden service](doc:tor) for your node that will also work well behind NAT firewalls.
 
@@ -43,23 +43,17 @@ Alternatively, you can [setup a TOR hidden service](doc:tor) for your node that 
 
 No.
 
-### Can I use a single `bitcoind` for multiple `lightningd` ?
+### Can I use a single `palladiumd` for multiple `lightningd` ?
 
-Yes. All `bitcoind` calls are handled by the bundled `bcli` plugin. `lightningd` does not use `bitcoind`'s wallet. While on the topic, `lightningd` does not require the `-txindex` option on `bitcoind`.
+Yes. All `palladiumd` calls are handled by the bundled `bcli` plugin. `lightningd` does not use `palladiumd`'s wallet. While on the topic, `lightningd` does not require the `-txindex` option on `palladiumd`.
 
-If you use a single `bitcoind` for multiple `lightningd`'s, be sure to raise the `bitcoind`  
-max RPC thread limit (`-rpcthreads`), each `lightningd` can use up to 4 threads, which is  
-the default `bitcoind` max.
+If you use a single `palladiumd` for multiple `lightningd`'s, be sure to raise the `palladiumd`
+max RPC thread limit (`-rpcthreads`), each `lightningd` can use up to 4 threads, which is
+the default `palladiumd` max.
 
-### Can I use Core Lightning on mobile ?
+### Can I use Palladium Lightning on mobile ?
 
-#### Remote control
-
-[Spark-wallet](https://github.com/shesek/spark-wallet/) is the most popular remote control HTTP server for `lightningd`. Use it [behind tor](https://github.com/shesek/spark-wallet/blob/master/doc/onion.md).
-
-#### `lightningd` on Android
-
-Effort has been made to get `lightningd` running on Android, [see issue #3484](https://github.com/ElementsProject/lightning/issues/3484). Currently unusable.
+Remote control via HTTP API is possible. See the [app development](doc:app-development) guide for available interfaces (JSON-RPC, REST, gRPC, Commando).
 
 # Channel Management
 
@@ -124,7 +118,7 @@ lightning-cli connect $PEERID
 
 
 
-The lack of funding locked messages is a bug we are trying to debug here at issue [5336](https://github.com/ElementsProject/lightning/issues/5366), if you have encountered this issue please drop us a comment and any information that may be helpful.
+The lack of funding locked messages is a known upstream issue. If you encounter it, please open an issue in the Palladium Lightning repository.
 
 If this didn't work it could be that the peer is simply not caught up with the blockchain and hasn't seen the funding confirm yet. In this case we can either wait or force a unilateral close:
 
@@ -152,10 +146,10 @@ If you don't want to wait for the channel to confirm, you could forget the chann
 
 There are 3 types of 'rescans' you can make:
 
-- `rescanblockchain`: A `bitcoind` RPC call which rescans the blockchain starting at the given height. This does not have an effect on Core Lightning as `lightningd` tracks all block and wallet data independently.
-- `--rescan=depth`: A `lightningd` configuration flag. This flag is read at node startup and tells lightningd at what depth from current blockheight to rebuild its internal state.  
+- `rescanblockchain`: A `palladiumd` RPC call which rescans the blockchain starting at the given height. This does not have an effect on Palladium Lightning as `lightningd` tracks all block and wallet data independently.
+- `--rescan=depth`: A `lightningd` configuration flag. This flag is read at node startup and tells lightningd at what depth from current blockheight to rebuild its internal state.
    (You can specify an exact block to start scanning from, instead of depth from current height, by using a negative number)
-- `dev-rescan-outputs`: A `lightningd` RPC call. Only available if your node has been started in developer mode (i.e. `--developer`). This will sync the state for known UTXOs in the `lightningd` wallet with `bitcoind`. As it only operates on outputs already seen on chain by the `lightningd` internal wallet, this will not find missing wallet funds.
+- `dev-rescan-outputs`: A `lightningd` RPC call. Only available if your node has been started in developer mode (i.e. `--developer`). This will sync the state for known UTXOs in the `lightningd` wallet with `palladiumd`. As it only operates on outputs already seen on chain by the `lightningd` internal wallet, this will not find missing wallet funds.
 
 ### Database corruption / channel state lost
 

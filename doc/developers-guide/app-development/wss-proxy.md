@@ -10,7 +10,7 @@ The WSS Proxy plugin is a Rust-based proxy server. It facilitates encrypted comm
 
 ## Installation
 
-The plugin is built-in with Core Lightning.
+The plugin is built-in with Palladium Lightning.
 
 ## Configuration
 

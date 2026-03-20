@@ -8,7 +8,7 @@ privacy:
 ---
 ## Using SQL plugin
 
-Since version 23.02, Core Lightning ships with a powerful SQL plugin that allows you to query your node and analyse data for channel / liquidity management, accounting and audit. 
+Since version 23.02, Palladium Lightning ships with a powerful SQL plugin that allows you to query your node and analyse data for channel / liquidity management, accounting and audit. 
 
 See [sql](ref:sql) for a full primer on its usage.
 

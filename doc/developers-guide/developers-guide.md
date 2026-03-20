@@ -10,9 +10,9 @@ privacy:
 ---
 ## Using `startup_regtest.sh`
 
-The Core Lightning project provides a script `startup_regtest.sh` to simulate the Lightning Network in your local dev environment. The script starts up some local nodes with bitcoind, all running on regtest and makes it easier to test things out, by hand.
+The Palladium Lightning project provides a script `startup_regtest.sh` to simulate the Lightning Network in your local dev environment. The script starts up some local nodes with palladiumd, all running on regtest and makes it easier to test things out, by hand.
 
-Navigate to `contrib` in your Core Lightning directory:
+Navigate to `contrib` in your Palladium Lightning directory:
 
 ```shell
 cd contrib

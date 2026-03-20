@@ -4,7 +4,7 @@ slug: hooks
 privacy:
   view: public
 ---
-Hooks allow a plugin to define custom behavior for `lightningd` without having to modify the Core Lightning source code itself. A plugin declares that it'd like to be consulted on what to do next for certain events in the daemon. A hook can then decide how `lightningd` should react to the given event.
+Hooks allow a plugin to define custom behavior for `lightningd` without having to modify the Palladium Lightning source code itself. A plugin declares that it'd like to be consulted on what to do next for certain events in the daemon. A hook can then decide how `lightningd` should react to the given event.
 
 When hooks are registered, they can optionally specify "before" and "after" arrays of plugin names, which control what order they will be called in. If a plugin name is unknown, it is ignored, otherwise if the hook calls cannot be ordered to satisfy the specifications of all plugin hooks, the plugin registration will fail.
 
@@ -496,7 +496,7 @@ Note: The `rpc_command` hook is chainable. If two or more plugins try to replace
 
 ### `custommsg`
 
-The `custommsg` plugin hook is the receiving counterpart to the [`sendcustommsg`](ref:sendcustommsg) RPC method and allows plugins to handle messages that are not handled internally. The goal of these two components is to allow the implementation of custom protocols or prototypes on top of a Core Lightning node, without having to change the node's implementation itself. Note that if the hook registration specifies "filters" then that should be a JSON array of message numbers, and the hook will only be called for those. Otherwise, the hook is called for all messages not handled internally.
+The `custommsg` plugin hook is the receiving counterpart to the [`sendcustommsg`](ref:sendcustommsg) RPC method and allows plugins to handle messages that are not handled internally. The goal of these two components is to allow the implementation of custom protocols or prototypes on top of a Palladium Lightning node, without having to change the node's implementation itself. Note that if the hook registration specifies "filters" then that should be a JSON array of message numbers, and the hook will only be called for those. Otherwise, the hook is called for all messages not handled internally.
 
 The payload for a call follows this format:
 ```json
@@ -506,7 +506,7 @@ The payload for a call follows this format:
 }
 ```
 
-This payload would have been sent by the peer with the `node_id` matching `peer_id`, and the message has type `0x1337` and contents `ffffffff`. Notice that the messages are currently limited to odd-numbered types and must not match a type that is handled internally by Core Lightning. These limitations are in place in order to avoid conflicts with the internal state tracking, and avoiding disconnections or channel closures, since odd-numbered message can be ignored by nodes (see ["it's ok to be odd" in the specification](https://github.com/lightning/bolts/blob/c74a3bbcf890799d343c62cb05fcbcdc952a1cf3/01-messaging.md#lightning-message-format) for details). The plugin must implement the parsing of the message, including the type prefix, since Core Lightning does not know how to parse the message.
+This payload would have been sent by the peer with the `node_id` matching `peer_id`, and the message has type `0x1337` and contents `ffffffff`. Notice that the messages are currently limited to odd-numbered types and must not match a type that is handled internally by Palladium Lightning. These limitations are in place in order to avoid conflicts with the internal state tracking, and avoiding disconnections or channel closures, since odd-numbered message can be ignored by nodes (see ["it's ok to be odd" in the specification](https://github.com/lightning/bolts/blob/c74a3bbcf890799d343c62cb05fcbcdc952a1cf3/01-messaging.md#lightning-message-format) for details). The plugin must implement the parsing of the message, including the type prefix, since Palladium Lightning does not know how to parse the message.
 
 Because this is a chained hook, the daemon expects the result to be `{'result': 'continue'}`. It will fail if something else is returned.
 

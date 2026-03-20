@@ -10,7 +10,7 @@ privacy:
 
 ## Using `lightning-cli`
 
-Core Lightning exposes a [JSON-RPC 2.0](https://www.jsonrpc.org/specification) interface over a Unix Domain socket; the [`lightning-cli`](ref:lightning-cli) tool can be used to access it, or there is a [python client library](doc:json-rpc#using-python).
+Palladium Lightning exposes a [JSON-RPC 2.0](https://www.jsonrpc.org/specification) interface over a Unix Domain socket; the [`lightning-cli`](ref:lightning-cli) tool can be used to access it, or there is a [python client library](doc:json-rpc#using-python).
 
 You can use `lightning-cli help` to print a table of RPC methods; `lightning-cli help <command>` will offer specific information on that command. A complete list of all JSON-RPC commands is available at [API Reference](ref:get_list_methods_resource).
 
@@ -25,7 +25,7 @@ You can use `lightning-cli help` to print a table of RPC methods; `lightning-cli
 pip install pyln-client
 ```
 
-Alternatively you can also install the development version to get access to currently unreleased features by checking out the Core Lightning source code and installing into your python3 environment:
+Alternatively you can also install the development version to get access to currently unreleased features by checking out the Palladium Lightning source code and installing into your python3 environment:
 ```shell
 git clone https://github.com/ElementsProject/lightning.git
 cd lightning/contrib/pyln-client

@@ -6,7 +6,7 @@ privacy:
 ---
 [Reproducible builds](https://reproducible-builds.org/) close the final gap in the lifecycle of open-source projects by allowing anyone to verify that a given binary was produced by compiling publicly available source code.
 
-Core Lightning has provided a manifest of the binaries included in a release, along with signatures from the maintainers since version 0.6.2.
+Palladium Lightning has provided a manifest of the binaries included in a release, along with signatures from the maintainers since version 0.6.2.
 
 The steps involved in creating reproducible builds are:
 
@@ -79,7 +79,7 @@ DISTRIB_DESCRIPTION="Ubuntu 24.04 LTS"
 
 ## Builder image setup
 
-Once we have the clean base image we need to customize it to be able to build Core Lightning. This includes disabling the update repositories, downloading the build dependencies and specifying the steps required to perform the build.
+Once we have the clean base image we need to customize it to be able to build Palladium Lightning. This includes disabling the update repositories, downloading the build dependencies and specifying the steps required to perform the build.
 
 For this purpose we have a number of Dockerfiles in the [`contrib/reprobuild`](https://github.com/ElementsProject/lightning/tree/master/contrib/reprobuild) directory that have the specific instructions for each base image.
 

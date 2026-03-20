@@ -2,19 +2,19 @@
 title: Backup your wallet
 slug: backup
 content:
-  excerpt: Learn the various backup options available for your Core Lightning node.
+  excerpt: Learn the various backup options available for your Palladium Lightning node.
 privacy:
   view: public
 ---
 
 In Lightning, since _you_ are the only one storing all your financial information, you **_cannot_** recover this financial information from anywhere else.This means that on Lightning, **you have to** responsibly back up your financial information yourself, using various processes and automation.
 
-The discussion below assumes that you know the location of your `$LIGHTNINGDIR`, and you know the directory structure within. By default your `$LIGHTNINGDIR` will be `~/.lightning/${COIN}`. For example, if you are running `--mainnet`, `$LIGHTNINGDIR` will be  `~/.lightning/bitcoin`.
+The discussion below assumes that you know the location of your `$LIGHTNINGDIR`, and you know the directory structure within. By default your `$LIGHTNINGDIR` will be `~/.lightning/${COIN}`. For example, if you are running `--network=palladium`, `$LIGHTNINGDIR` will be  `~/.lightning/palladium`.
 
 
 ## Backup
 
-Core Lightning has an internal bitcoin wallet and you can backup three main components from the wallet:
+Palladium Lightning has an internal Palladium wallet and you can backup three main components from the wallet:
 - HSM Secret: On-chain funds are backed up via the HD wallet seed, stored in byte-form as hsm_secret
 - Static Channel: Lightning channel states to recover are stored in a file named `emergency.recover`
 - Database: Detailed information for funds locked in channels are stored in the database
@@ -41,9 +41,9 @@ it is kept in a secure location.
 The `hsm_secret` is created when you first create the node, and does not change. Thus, a one-time backup of `hsm_secret` is sufficient.
 
 
-#### Mnemonic Format (v25.12+)
+#### Mnemonic Format
 
-Starting with Core Lightning v25.12, new nodes are created with a BIP39 12-word mnemonic phrase as their root secret. By default, **no passphrase is used**. You can optionally protect your mnemonic with a passphrase for additional security by starting `lightningd` with the `--hsm-passphrase` option.
+Palladium Lightning nodes are created with a BIP39 12-word mnemonic phrase as their root secret. By default, **no passphrase is used**. You can optionally protect your mnemonic with a passphrase for additional security by starting `lightningd` with the `--hsm-passphrase` option.
 
 **Backing up your mnemonic:**
 
@@ -77,7 +77,7 @@ Note: This requires setting `exposesecret-passphrase` in your config. This is a 
 
 **Recovery with mnemonic:**
 
-For v25.12+ nodes, you can use the `recover` RPC command to recover directly from your mnemonic:
+You can use the `recover` RPC command to recover directly from your mnemonic:
 
 ```shell
 lightning-cli recover hsmsecret="word1 word2 word3 ... word12"
@@ -98,50 +98,13 @@ Then start `lightningd` normally (with `--hsm-passphrase` if you used a passphra
 
 #### Readable Format
 
-Run `tools/lightning-hsmtool getsecret <hsm/secret/path>` to get the `hsm_secret` in readable format. For v25.12+ nodes, this returns the 12-word mnemonic. For older nodes, you will get a codex32 string instead, and must supply a four-letter id to attach to it, like so:
-
-Example for newer nodes: `tools/lightning-hsmtool getsecret ~/.lightning/bitcoin/hsm_secret`
-
-Example for older nodes: `tools/lightning-hsmtool getsecret ~/.lightning/bitcoin/hsm_secret adt0`.
-
-`hsm/secret/path` in the above command is `$LIGHTNINGDIR/hsm_secret`, and
-`id` is any 4 character string used to identify this secret. It **cannot** contain `i`, `o`, or `b`, but **can** contain all digits except `1`.
-
-**Recovery with codex32 (legacy nodes):**
-
-Legacy nodes can recover using the `recover` RPC command with a codex32 secret:
+Run `tools/lightning-hsmtool getsecret <hsm/secret/path>` to get the `hsm_secret` as a 12-word mnemonic:
 
 ```shell
-lightning-cli recover hsmsecret=<codex32secret>
+tools/lightning-hsmtool getsecret ~/.lightning/palladium/hsm_secret
 ```
 
-Click [here](doc:hsm-secret) to learn more about other cool hsm methods.
-
-
-#### Legacy Formats (Pre-v25.12)
-
-For nodes created before v25.12, the `hsm_secret` was stored as a 32-byte binary file. These can be backed up in hexadecimal format:
-
-
-##### Hex Format
-
-The secret is just 32 bytes, and can be converted into hexadecimal digits like below:
-
-```shell
-cd $LIGHTNINGDIR
-xxd hsm_secret
-```
-
-To convert above hex back into the binary `hsm_secret` (32 bytes format) for recovery, you can re-enter the hexdump into a text file and use `xxd`:
-
-```
-cat > hsm_secret_hex.txt <<HEX
-00: 30cc f221 94e1 7f01 cd54 d68c a1ba f124
-10: e1f3 1d45 d904 823c 77b7 1e18 fd93 1676
-HEX
-xxd -r hsm_secret_hex.txt > hsm_secret
-chmod 0400 hsm_secret
-```
+Click [here](doc:hsm-secret) to learn more about other HSM methods.
 
 
 ### Static Channel Backup

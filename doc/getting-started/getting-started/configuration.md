@@ -10,9 +10,9 @@ privacy:
 
 ## Using a configuration file
 
-To use a configuration file, create a file named `config` within your top-level lightning directory or network subdirectory (eg. `~/.lightning/config` or `~/.lightning/bitcoin/config`).
+To use a configuration file, create a file named `config` within your top-level lightning directory or network subdirectory (eg. `~/.lightning/config` or `~/.lightning/palladium/config`).
 
-When `lightningd` starts up it usually reads a general configuration file (default: `$HOME/.lightning/config`) then a network-specific configuration file (default: `$HOME/.lightning/testnet/config`).  This can be changed using `--conf` and `--lightning-dir`.
+When `lightningd` starts up it usually reads a general configuration file (default: `$HOME/.lightning/config`) then a network-specific configuration file (default: `$HOME/.lightning/palladium/config`).  This can be changed using `--conf` and `--lightning-dir`.
 
 > 📘 
 > 
@@ -53,62 +53,46 @@ The [`listconfigs`](ref:listconfigs) command will output a valid configuration f
 
 - **database-upgrade**=_BOOL_
 
-    Upgrades to Core Lightning often change the database: once this is done,  
-  downgrades are not generally possible.  By default, Core Lightning will  
+    Upgrades to Palladium Lightning often change the database: once this is done,  
+  downgrades are not generally possible.  By default, Palladium Lightning will  
   exit with an error rather than upgrade, unless this is an official released  
   version.  If you really want to upgrade to a non-release version, you can  
   set this to _true_ (or _false_ to never allow a non-reversible upgrade!).
 
-### Bitcoin control options:
+### Palladium control options:
 
 **network**=_NETWORK_
 
-- Select the network parameters (_bitcoin_, _testnet_, _testnet4_, _signet_, or _regtest_).  
+- Select the network parameters (_palladium_ or _regtest_).
   This is not valid within the per-network configuration file.
-
-- **mainnet**
-
-  Alias for _network=bitcoin_.
-
-- **testnet**
-
-  Alias for _network=testnet_.
-
-- **testnet4**
-
-  Alias for _network=testnet4_.
-
-- **signet**
-
-  Alias for _network=signet_.
 
 - **bitcoin-cli**=_PATH_ [plugin `bcli`]
 
-  The name of _bitcoin-cli_ executable to run.
+  The name of _palladium-cli_ executable to run.
 
 - **bitcoin-datadir**=_DIR_ [plugin `bcli`]
 
-  _-datadir_ argument to supply to bitcoin-cli(1).
+  _-datadir_ argument to supply to palladium-cli(1).
 
 - **bitcoin-rpcuser**=_USER_ [plugin `bcli`]
 
-  The RPC username for talking to bitcoind(1).
+  The RPC username for talking to palladiumd(1).
 
 - **bitcoin-rpcpassword**=_PASSWORD_ [plugin `bcli`]
 
-  The RPC password for talking to bitcoind(1).
+  The RPC password for talking to palladiumd(1).
 
 - **bitcoin-rpcconnect**=_HOST_ [plugin `bcli`]
 
-  The bitcoind(1) RPC host to connect to.
+  The palladiumd(1) RPC host to connect to.
 
 - **bitcoin-rpcport**=_PORT_ [plugin `bcli`]
 
-  The bitcoind(1) RPC port to connect to.
+  The palladiumd(1) RPC port to connect to.
 
 - **bitcoin-retry-timeout**=_SECONDS_ [plugin `bcli`]
 
-  Number of seconds to keep trying a bitcoin-cli(1) command. If the  
+  Number of seconds to keep trying a palladium-cli(1) command. If the
   command keeps failing after this time, exit with a fatal error.
 
 - **rescan**=_BLOCKS_
@@ -277,9 +261,9 @@ The [`listconfigs`](ref:listconfigs) command will output a valid configuration f
 - **force-feerates**==_VALUES_
 
   Networks like regtest and testnet have unreliable fee estimates: we usually treat them as the minimum (253 sats/kw) if we can't get them.  
-  This allows override of one or more of our standard feerates (see [`feerates`](ref:feerates)).  Up to 5 values, separated by '/' can be provided: if fewer are provided, then the final value is used for the remainder.  The values are in per-kw (roughly 1/4 of bitcoind's per-kb values), and the order is "opening", "mutual_close", "unilateral_close", "delayed_to_us", "htlc_resolution", and "penalty".
+  This allows override of one or more of our standard feerates (see [`feerates`](ref:feerates)).  Up to 5 values, separated by '/' can be provided: if fewer are provided, then the final value is used for the remainder.  The values are in per-kw (roughly 1/4 of palladiumd's per-kb values), and the order is "opening", "mutual_close", "unilateral_close", "delayed_to_us", "htlc_resolution", and "penalty".
 
-  You would usually put this option in the per-chain config file, to avoid setting it on Bitcoin mainnet!  e.g. `~rusty/.lightning/regtest/config`.
+  You would usually put this option in the per-chain config file, to avoid setting it on Palladium mainnet!  e.g. `~/.lightning/regtest/config`.
 
 - **htlc-minimum-msat**=_MILLISATOSHI_
 
@@ -377,7 +361,7 @@ Note: prior to v22.11, forwards for channels which were closed were not easily d
 
 Note that for simple setups, the implicit _autolisten_ option does the right thing: for the mainnet (bitcoin) network it will try to bind to port 9735 on IPv4 and IPv6, and will announce it to peers if it seems like a public address (and other default ports for other networks, as described below).
 
-Core Lightning also support IPv4/6 address discovery behind NAT routers. If your node detects an new public address, it will update its announcement. For this to work you need to forward the default TCP port 9735 to your node. IP discovery is only active if no other addresses are announced.
+Palladium Lightning also support IPv4/6 address discovery behind NAT routers. If your node detects an new public address, it will update its announcement. For this to work you need to forward the default TCP port 9735 to your node. IP discovery is only active if no other addresses are announced.
 
 You can instead use _addr_ to override this (eg. to change the port), or precisely control where to bind and what to announce with the _bind-addr_ and _announce-addr_ options. These will **disable** the _autolisten_ logic, so you must specifiy exactly what you want!
 
@@ -465,7 +449,7 @@ plugins along with any immediate subdirectories). You can specify additional pat
 
 - **plugin**=_PATH_
 
-  Specify a plugin to run as part of Core Lightning. This can be specified multiple times to add multiple plugins.  Note that unless plugins themselves specify ordering requirements for being called on various hooks, plugins will be ordered by commandline, then config file.
+  Specify a plugin to run as part of Palladium Lightning. This can be specified multiple times to add multiple plugins.  Note that unless plugins themselves specify ordering requirements for being called on various hooks, plugins will be ordered by commandline, then config file.
 
 - **plugin-dir**=_DIRECTORY_
 
@@ -481,10 +465,10 @@ plugins along with any immediate subdirectories). You can specify additional pat
 
 - **important-plugin**=_PLUGIN_
 
-  Specify a plugin to run as part of Core Lightning.  
+  Specify a plugin to run as part of Palladium Lightning.  
   This can be specified multiple times to add multiple plugins.  
-  Plugins specified via this option are considered so important, that if the plugin stops for any reason (including via [plugin](ref:plugin) `stop`), Core Lightning will also stop running.  
-  This way, you can monitor crashes of important plugins by simply monitoring if Core Lightning terminates.  
+  Plugins specified via this option are considered so important, that if the plugin stops for any reason (including via [plugin](ref:plugin) `stop`), Palladium Lightning will also stop running.  
+  This way, you can monitor crashes of important plugins by simply monitoring if Palladium Lightning terminates.  
   Built-in plugins, which are installed with lightningd, are automatically considered important.
 
 ### Experimental Options
@@ -500,7 +484,7 @@ A build _with_ `--enable-experimental-features` flag hard-codes some of below op
 
 - **experimental-shutdown-wrong-funding**
 
-  Specifying this allows the `wrong_funding` field in \_shutdown: if a remote node has opened a channel but claims it used the incorrect txid (and the channel hasn't been used yet at all) this allows them to negotiate a clean shutdown with the txid they offer #[4421](https://github.com/ElementsProject/lightning/pull/4421).
+  Specifying this allows the `wrong_funding` field in \_shutdown: if a remote node has opened a channel but claims it used the incorrect txid (and the channel hasn't been used yet at all) this allows them to negotiate a clean shutdown with the txid they offer.
 
 - **experimental-dual-fund**
 

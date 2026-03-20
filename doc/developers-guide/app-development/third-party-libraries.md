@@ -7,7 +7,7 @@ privacy:
 
 ## GraphQL
 
-[c-lightning-graphql](https://github.com/nettijoe96/c-lightning-graphql) exposes the Core Lightning API over GraphQL. 
+[c-lightning-graphql](https://github.com/nettijoe96/c-lightning-graphql) exposes the Palladium Lightning API over GraphQL.
 
 > 🚧 
 > 

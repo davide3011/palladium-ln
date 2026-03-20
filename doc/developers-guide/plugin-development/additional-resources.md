@@ -10,7 +10,7 @@ Check out a step-by-step recipe for building a simple `helloworld.py` example pl
 
 🦉 **[Write a hello-world plugin in Python](https://docs.corelightning.org/v1.0/recipes/write-a-hello-world-plugin-in-python)**
 
-You can also follow along the video below where Blockstream Engineer Rusty Russell walks you all the way from getting started with Core Lightning to building a plugin in Python.
+You can also follow along the video below where Rusty Russell walks you through getting started with the upstream Core Lightning project and building a plugin in Python (the plugin API is identical in Palladium Lightning).
 
 **[▶️ Rusty Russell | Getting Started with c-lightning | July 2019](https://www.youtube.com/watch?v=fab4P3BIZxk)**
 

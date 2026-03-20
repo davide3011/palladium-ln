@@ -3,32 +3,30 @@ title: Set up your node
 slug: getting-started
 content:
   excerpt: >-
-    This guide will help you set up a Core Lightning node. You'll be up and
+    This guide will help you set up a Palladium Lightning node. You'll be up and
     running in a jiffy!
 privacy:
   view: public
 ---
-The Core Lightning implementation has been in production use on the Bitcoin mainnet since early 2018, with the launch of the [Blockstream Store](https://blockstream.com/2018/01/16/en-lightning-charge/). We recommend getting started by experimenting on `testnet` (or `regtest`), but the implementation is considered stable and can be safely used on mainnet.
+Palladium Lightning is the standard-compliant Lightning Network implementation for Palladium, a Bitcoin fork. We recommend getting started by experimenting on `regtest`, but the implementation is considered stable and can be used on mainnet.
 
-The following steps will get you up and running with Core Lightning:
+The following steps will get you up and running with Palladium Lightning:
 
 ## 1. Prerequisites
 
 - [x] **Operating System**
 
-  Core Lightning is available on Linux and macOS. To run Core Lightning on Windows, consider using [docker](doc:installation#docker).
+  Palladium Lightning runs via Docker on Linux and macOS. Windows is supported through Docker Desktop.
+
 - [x] **Hardware**
 
-  The requirements to run a Core Lightning node, at a minimum, are 4 GB RAM, ~500 GB of storage if you're running a Bitcoin Core full node, or less than 5 GB of storage if you run a pruned Bitcoin Core node or connect to Bitcoin Core remotely. Finally, a trivial amount of reliable network bandwidth is expected.
+  The minimum requirements are 4 GB RAM and enough storage for a `palladiumd` node. See [hardware considerations](doc:hardware-considerations) for a full breakdown.
 
+- [x] **Palladium Core**
 
+  Palladium Lightning requires a running `palladiumd` instance that is fully synced with the Palladium network, connected to the `palladium-net` Docker network. See [Palladium Core setup](doc:bitcoin-core) for details.
 
-  For a thorough understanding of the best hardware setup for your usage / scenario, see guidance at [hardware considerations](doc:hardware-considerations).
-- [x] **Bitcoin Core**
-
-  Core Lightning requires a locally (or remotely) running `bitcoind` (version 0.16 or above) that is fully caught up with the network you're running on, and relays transactions (ie with `blocksonly=0`). Pruning (`prune=n` option in `bitcoin.conf`) is partially supported, see [here](doc:bitcoin-core#using-a-pruned-bitcoin-core-node) for more details. You can also connect your Core Lightning node to a remotely running Bitcoin Core, see [here](doc:bitcoin-core#connecting-to-bitcoin-core-remotely) to learn how.
-
-## 2. [Install](doc:installation) Core Lightning
+## 2. [Install](doc:installation) Palladium Lightning
 
 ## 3. [Configure your node](doc:configuration) as per your requirements (_optional_)
 

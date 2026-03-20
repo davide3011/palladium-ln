@@ -7,9 +7,9 @@ privacy:
 
 # CLNRest
 
-CLNRest is a lightweight Rust-based built-in Core Lightning plugin (from v23.08) that transforms RPC calls into a REST service. 
-It also broadcasts Core Lightning notifications to listeners connected to its websocket server. By generating REST API endpoints, 
-it enables the execution of Core Lightning's RPC methods behind the scenes and provides responses in JSON format.
+CLNRest is a lightweight Rust-based built-in Palladium Lightning plugin (from v23.08) that transforms RPC calls into a REST service. 
+It also broadcasts Palladium Lightning notifications to listeners connected to its websocket server. By generating REST API endpoints, 
+it enables the execution of Palladium Lightning's RPC methods behind the scenes and provides responses in JSON format.
 
 An online demo for the REST interface is available at [REST API REFERENCE](ref:get_list_methods_resource).
 

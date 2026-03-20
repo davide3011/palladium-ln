@@ -2,15 +2,15 @@
 title: Plugins
 slug: plugins
 content:
-  excerpt: Leverage a plethora of plugins on Core Lightning.
+  excerpt: Leverage a plethora of plugins on Palladium Lightning.
 privacy:
   view: public
 ---
-Power up your Core Lightning node and tailor it for your business needs with community built plugins.
+Power up your Palladium Lightning node and tailor it for your business needs with community built plugins.
 
 ## Reckless plugin manager
 
-`reckless` is a plugin manager for Core Lightning that you can use to install and uninstall plugins with a single command.
+`reckless` is a plugin manager for Palladium Lightning that you can use to install and uninstall plugins with a single command.
 
 > 📘 
 > 
@@ -30,7 +30,7 @@ reckless will exit early in the event that:
 - dependencies are not sucessfully installed
 - the plugin fails to execute
 
-Reckless-installed plugins reside in the 'reckless' subdirectory of the user's `.lightning` folder.  By default, plugins are activated on the `bitcoin` network (and use lightningd's bitcoin network config), but regtest may also be used.
+Reckless-installed plugins reside in the 'reckless' subdirectory of the user's `.lightning` folder.  By default, plugins are activated on the `palladium` network (and use lightningd's palladium network config), but regtest may also be used.
 
 Other commands include:
 
@@ -104,15 +104,15 @@ Available option flags:
 **-c**, **--conf** _lightning\_config_  
 	pass the config used by lightningd
 
-**-r**, **--regtest**  
-	use the regtest network and config instead of bitcoin mainnet
+**-r**, **--regtest**
+	use the regtest network and config instead of palladium mainnet
 
 **-v**, **--verbose**  
 	request additional debug output
 
 > 📘 
 > 
-> Running the first time will prompt the user that their lightningd's bitcoin config will be appended (or created) to inherit the reckless config file (this config is specific to bitcoin by default.) Management of plugins will subsequently modify this file.
+> Running the first time will prompt the user that their lightningd's palladium config will be appended (or created) to inherit the reckless config file (this config is specific to palladium by default.) Management of plugins will subsequently modify this file.
 
 ## Troubleshooting
 

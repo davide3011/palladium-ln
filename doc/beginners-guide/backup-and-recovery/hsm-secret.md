@@ -8,14 +8,14 @@ privacy:
 ---
 
 
-## Mnemonic-Based HSM Secrets (v25.12+)
+## Mnemonic-Based HSM Secrets
 
-Starting with Core Lightning v25.12, new nodes are automatically created with a BIP39 12-word mnemonic phrase as their root secret. This provides a more user-friendly backup method compared to the previous 32-byte binary format.
+Palladium Lightning nodes are automatically created with a BIP39 12-word mnemonic phrase as their root secret.
 
 
 ### Automatic HSM Secret Creation
 
-When you first start `lightningd` (v25.12+), it will automatically generate a random BIP39 mnemonic and create the `hsm_secret` file **without a passphrase**. No prompts are shown during this process.
+When you first start `lightningd`, it will automatically generate a random BIP39 mnemonic and create the `hsm_secret` file **without a passphrase**. No prompts are shown during this process.
 
 If you want to add a passphrase for additional security, start `lightningd` with the `--hsm-passphrase` option:
 
@@ -67,7 +67,7 @@ You can encrypt a legacy `hsm_secret` content (which is used to derive the HD wa
 - either by passing the `--hsm-passphrase` startup argument (this replaced the deprecated `--encrypted-hsm` option in v25.12)
 - or by using the `encrypt` method from `/tools/lightning-hsmtool`. 
 
-If you encrypt your legacy `hsm_secret`, you will have to pass the `--hsm-passphrase` startup option to `lightningd`. Once your `hsm_secret` is encrypted, you **will not** be able to access your funds without your password, so please beware with your password management. Also, beware of not feeling too safe with an encrypted `hsm_secret`: unlike for `bitcoind` where the wallet encryption can restrict the usage of some RPC command, `lightningd` always needs to access keys from the wallet which is thus **not locked** (yet), even with an encrypted BIP32 master seed.
+If you encrypt your legacy `hsm_secret`, you will have to pass the `--hsm-passphrase` startup option to `lightningd`. Once your `hsm_secret` is encrypted, you **will not** be able to access your funds without your password, so please beware with your password management. Also, beware of not feeling too safe with an encrypted `hsm_secret`: unlike for `palladiumd` where the wallet encryption can restrict the usage of some RPC command, `lightningd` always needs to access keys from the wallet which is thus **not locked** (yet), even with an encrypted BIP32 master seed.
 
 
 ### Decrypt Legacy HSM Secret

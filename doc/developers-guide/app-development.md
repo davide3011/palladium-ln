@@ -2,14 +2,14 @@
 title: App Development
 slug: app-development
 content:
-  excerpt: Build a lightning application using Core Lightning APIs.
+  excerpt: Build a lightning application using Palladium Lightning APIs.
 privacy:
   view: public
 ---
 
 ## Interacting with CLN Node
 
-There are several ways to connect and interact with a Core Lightning node in order to build a lightning app or integrate lightning in your application.
+There are several ways to connect and interact with a Palladium Lightning node in order to build a lightning app or integrate lightning in your application.
 
 - Using **[JSON-RPC commands](doc:json-rpc)** if you're building an application in the same system as the CLN node.
 - Using **[REST APIs](doc:rest)** if you're building an application in a remote client and want to connect to the CLN node over a secure network using REST interface.
@@ -20,7 +20,7 @@ There are several ways to connect and interact with a Core Lightning node in ord
 
 ## CLN connection URIs
 
-This section outlines the standard URI formats for connecting to Core Lightning (CLN) nodes via different protocols.
+This section outlines the standard URI formats for connecting to Palladium Lightning (CLN) nodes via different protocols.
 
 ### Commando WebSocket Connection
 ```

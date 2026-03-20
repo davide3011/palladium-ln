@@ -4,7 +4,7 @@ slug: tor
 privacy:
   view: public
 ---
-To use any Tor features with Core Lightning you must have Tor installed and running.
+To use any Tor features with Palladium Lightning you must have Tor installed and running.
 
 Note that we only support Tor v3: you can check your installed Tor version with `tor --version` or `sudo tor --version`
 
@@ -24,11 +24,11 @@ To keep a safe configuration for minimal harassment (See [Tor FAQ](https://www.t
 
 `ExitPolicy reject *:* # no exits allowed`
 
-This does not affect Core Lightning connect, listen, etc. It will only prevent your node from becoming a Tor exit node. Only enable this if you are sure about the implications.
+This does not affect Palladium Lightning connect, listen, etc. It will only prevent your node from becoming a Tor exit node. Only enable this if you are sure about the implications.
 
 If you don't want to create .onion addresses this should be enough.
 
-There are several ways by which a Core Lightning node can accept or make connections over Tor. The node can be reached over Tor by connecting to its .onion address.
+There are several ways by which a Palladium Lightning node can accept or make connections over Tor. The node can be reached over Tor by connecting to its .onion address.
 
 To provide the node with a .onion address you can:
 
@@ -43,7 +43,7 @@ network between you and the Internet, as long as you can use Tor you can be conn
 
 > 📘 
 > 
-> Core Lightning also support IPv4/6 address discovery behind NAT routers.
+> Palladium Lightning also support IPv4/6 address discovery behind NAT routers.
 
 For this to work you need to forward the default TCP port 9735 to your node. In this case you don't need TOR to punch through your firewall. IP discovery is only active if no other addresses are announced. This usually has the benefit of quicker and more stable connections but does not  
 offer additional privacy.
@@ -109,10 +109,10 @@ cat /run/tor/control.authcookie > /dev/null
 
 
 
-If the above prints nothing and returns, then Core Lightning "should" work with your Tor.  
-If it prints an error, some configuration problem will likely prevent Core Lightning from working with your Tor.
+If the above prints nothing and returns, then Palladium Lightning "should" work with your Tor.  
+If it prints an error, some configuration problem will likely prevent Palladium Lightning from working with your Tor.
 
-Then make sure these are in your `${LIGHTNING_DIR}/config` or other Core Lightning configuration (or prepend `--` to each of them and add them to your `lightningd` invocation  
+Then make sure these are in your `${LIGHTNING_DIR}/config` or other Palladium Lightning configuration (or prepend `--` to each of them and add them to your `lightningd` invocation  
 command line):
 
 ```shell
@@ -124,16 +124,16 @@ always-use-proxy=true
 
 
 
-1. `proxy` informs Core Lightning that you have a SOCKS5 proxy at port 9050.  
-   Core Lightning will assume that this is a Tor proxy, port 9050 is the default in most Linux distributions; you can double-check `/etc/tor/torrc` for a `SocksPort` entry to confirm the port number.
-2. `bind-addr` informs Core Lightning to bind itself to port 9735.  
+1. `proxy` informs Palladium Lightning that you have a SOCKS5 proxy at port 9050.  
+   Palladium Lightning will assume that this is a Tor proxy, port 9050 is the default in most Linux distributions; you can double-check `/etc/tor/torrc` for a `SocksPort` entry to confirm the port number.
+2. `bind-addr` informs Palladium Lightning to bind itself to port 9735.  
    This is needed for the subsequent `statictor` to work.  
    9735 is the normal Lightning Network port, so this setting may already be present.  
    If you add a second `bind-addr=...` you may get errors, so choose this new one or keep the old one, but don't keep both.  
    This has to appear before any `statictor:` setting.
-3. `addr=statictor:` informs Core Lightning that you want to create a persistent hidden service that is based on your node private key.  
-   This informs Core Lightning as well that the Tor Control Port is 9051. You can also use `bind-addr=statictor:` instead to not announce the persistent hidden service, but if anyone wants to make a channel with you, you either have to connect to them, or you have to reveal your address to them explicitly (i.e. autopilots and the like will likely never connect to you).
-4. `always-use-proxy` informs Core Lightning to always use Tor even when connecting to nodes with public IPs. You can set this to `false` or remove it, if you are not privacy-conscious **and** find Tor is too slow for you.
+3. `addr=statictor:` informs Palladium Lightning that you want to create a persistent hidden service that is based on your node private key.  
+   This informs Palladium Lightning as well that the Tor Control Port is 9051. You can also use `bind-addr=statictor:` instead to not announce the persistent hidden service, but if anyone wants to make a channel with you, you either have to connect to them, or you have to reveal your address to them explicitly (i.e. autopilots and the like will likely never connect to you).
+4. `always-use-proxy` informs Palladium Lightning to always use Tor even when connecting to nodes with public IPs. You can set this to `false` or remove it, if you are not privacy-conscious **and** find Tor is too slow for you.
 
 ### Tor Browser and Orbot
 
@@ -141,7 +141,7 @@ It is possible to not install Tor on your computer, and rely on just Tor Browser
 Tor Browser will run a built-in Tor instance, but with the proxy at port 9150 and the control port at 9151 (the normal Tor has, by default, the proxy at port 9050 and the control  
 port at 9051). The mobile Orbot uses the same defaults as Tor Browser (9150 and 9151).
 
-You can then use these settings for Core Lightning:
+You can then use these settings for Palladium Lightning:
 
 ```shell
 proxy=127.0.0.1:9150
@@ -152,20 +152,20 @@ always-use-proxy=true
 
 
 
-You will have to run Core Lightning after launching Tor Browser or Orbot, and keep Tor Browser or Orbot open as long as Core Lightning is running, but this is a setup which allows others to connect and fund channels to you, anywhere (no port forwarding! works wherever Tor works!), and you do not have to do anything more complicated than download and install Tor Browser.  
-This may be useful for operating system distributions that do not have Tor in their repositories, assuming we can ever get Core Lightning running on those.
+You will have to run Palladium Lightning after launching Tor Browser or Orbot, and keep Tor Browser or Orbot open as long as Palladium Lightning is running, but this is a setup which allows others to connect and fund channels to you, anywhere (no port forwarding! works wherever Tor works!), and you do not have to do anything more complicated than download and install Tor Browser.  
+This may be useful for operating system distributions that do not have Tor in their repositories, assuming we can ever get Palladium Lightning running on those.
 
 ### Detailed Discussion
 
-#### Three Ways to Create .onion Addresses for Core Lightning
+#### Three Ways to Create .onion Addresses for Palladium Lightning
 
-1. You can configure Tor to create an onion address for you, and tell Core Lightning to use that address
-2. You can have Core Lightning tell Tor to create a new onion address every time
-3. You can configure Core Lightning to tell Tor to create the same onion address every time it starts up
+1. You can configure Tor to create an onion address for you, and tell Palladium Lightning to use that address
+2. You can have Palladium Lightning tell Tor to create a new onion address every time
+3. You can configure Palladium Lightning to tell Tor to create the same onion address every time it starts up
 
 #### Tor-Created .onion Address
 
-Having Tor create an onion address lets you run other services (e.g. a web server) at that same address, and you just tell that address to Core Lightning and it doesn't have to talk to the Tor server at all.
+Having Tor create an onion address lets you run other services (e.g. a web server) at that same address, and you just tell that address to Palladium Lightning and it doesn't have to talk to the Tor server at all.
 
 Put the following in your `/etc/tor/torrc` file:
 
@@ -191,11 +191,11 @@ sudo cat /var/lib/tor/lightningd-service_v3/hostname
 
 
 
-Now you need to tell Core Lightning to advertize that onion hostname and port, by placing `announce-addr=myaddress.onion` in your lightning config.
+Now you need to tell Palladium Lightning to advertize that onion hostname and port, by placing `announce-addr=myaddress.onion` in your lightning config.
 
-#### Letting Core Lightning Control Tor
+#### Letting Palladium Lightning Control Tor
 
-To have Core Lightning control your Tor addresses, you have to tell Tor to accept control commands from Core Lightning, either by using a cookie, or a password.
+To have Palladium Lightning control your Tor addresses, you have to tell Tor to accept control commands from Palladium Lightning, either by using a cookie, or a password.
 
 ##### Service authenticated by cookie
 
@@ -242,14 +242,14 @@ Save the file and restart the Tor service.
 
 Put `tor-service-password=yourpassword` (not the hash) in your lightning configuration file.
 
-##### Core Lightning Creating Persistent Hidden Addresses
+##### Palladium Lightning Creating Persistent Hidden Addresses
 
 This is usually better than transient addresses, as nodes won't have to wait for gossip propagation to find out your new address each time you restart.
 
 Once you've configured access to Tor as described above, you need to add _two_ lines in your lightningd config file:
 
 1. A local address which lightningd can tell Tor to connect to when connections come in, e.g. `bind-addr=127.0.0.1:9735`.
-2. After that, a `addr=statictor:127.0.0.1:9051` to tell Core Lightning to set up and announce a Tor onion address (and tell Tor to send connections to our real address, above).
+2. After that, a `addr=statictor:127.0.0.1:9051` to tell Palladium Lightning to set up and announce a Tor onion address (and tell Tor to send connections to our real address, above).
 
 You can use `bind-addr` if you want to set up the onion address and not announce it to the world for some reason.
 
@@ -314,7 +314,7 @@ If they match you can use the `--addr` command line option.
 
 Other nodes can connect to you entirely over Tor, and the Tor address doesn't change every time you restart.
 
-You simply tell Core Lightning to advertize both addresses (you can use `sudo cat /var/lib/tor/lightningd-service_v3/hostname` to get your Tor-assigned onion address).
+You simply tell Palladium Lightning to advertize both addresses (you can use `sudo cat /var/lib/tor/lightningd-service_v3/hostname` to get your Tor-assigned onion address).
 
 If you have an internal IP address:
 
@@ -335,11 +335,11 @@ announce-addr=your.onionAddress:port
 
 
 
-#### Case #3: Public IP address, and a fixed Tor address set by Core Lightning
+#### Case #3: Public IP address, and a fixed Tor address set by Palladium Lightning
 
 Other nodes can connect to you entirely over Tor, and the Tor address doesn't change every time you restart.
 
-See "Letting Core Lightning Control Tor" for how to get Core Lightning talking to Tor.
+See "Letting Palladium Lightning Control Tor" for how to get Palladium Lightning talking to Tor.
 
 If you have an internal IP address:
 
@@ -364,7 +364,7 @@ addr=statictor:127.0.0.1:9051
 
 Other nodes can only connect to you over Tor.
 
-You simply tell Core Lightning to advertize the Tor address (you can use `sudo cat /var/lib/tor/lightningd-service_v3/hostname` to get your Tor-assigned onion address).
+You simply tell Palladium Lightning to advertize the Tor address (you can use `sudo cat /var/lib/tor/lightningd-service_v3/hostname` to get your Tor-assigned onion address).
 
 ```
 announce-addr=your.onionAddress:port
@@ -374,11 +374,11 @@ always-use-proxy=true
 
 
 
-#### Case #4: Unannounced IP address, and a fixed Tor address set by Core Lightning
+#### Case #4: Unannounced IP address, and a fixed Tor address set by Palladium Lightning
 
 Other nodes can only connect to you over Tor.
 
-See "Letting Core Lightning Control Tor" for how to get Core Lightning  
+See "Letting Palladium Lightning Control Tor" for how to get Palladium Lightning  
 talking to Tor.
 
 ```

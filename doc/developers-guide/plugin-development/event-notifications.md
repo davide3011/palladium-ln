@@ -454,7 +454,7 @@ Emitted after we've caught up to the chain head on first start. Lists all curren
 
 ### `block_added`
 
-Emitted after each block is received from bitcoind, either during the initial sync or throughout the node's life as new blocks appear.
+Emitted after each block is received from palladiumd, either during the initial sync or throughout the node's life as new blocks appear.
 
 ```json
 {

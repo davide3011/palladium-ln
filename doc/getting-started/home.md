@@ -1,15 +1,15 @@
 ---
-title: Welcome to Core Lightning Documentation Portal
+title: Welcome to Palladium Lightning Documentation Portal
 slug: home
 content:
   excerpt: >-
-    Here you can find everything you need to jump-start your journey to running and building on Core Lightning.
+    Here you can find everything you need to jump-start your journey to running and building on Palladium Lightning.
 privacy:
   view: public
 ---
 > 📘 **Help us improve!**
 >
-> The Core Lightning documentation and API reference is a work-in-progress.  
+> The Palladium Lightning documentation and API reference is a work-in-progress.  
 > Feel free to suggest edits or send us your feedback by clicking **_Suggest Edits_**  
 > at the top-right of every page (_login required_) or via  
 > **[Telegram](https://t.me/lightningd)**.
@@ -101,7 +101,7 @@ privacy:
       </div>
       <h3 class="home-box-title">Plugins</h3>
       <p class="home-box-content">
-        Leverage a plethora of plugins on Core Lightning.
+        Leverage a plethora of plugins on Palladium Lightning.
       </p>
     </div>
   </a>
@@ -141,7 +141,7 @@ privacy:
       </div>
       <h3 class="home-box-title">App Development</h3>
       <p class="home-box-content">
-        Build a lightning app using Core Lightning APIs.
+        Build a lightning app using Palladium Lightning APIs.
       </p>
     </div>
   </a>
@@ -152,7 +152,7 @@ privacy:
       </div>
       <h3 class="home-box-title">Plugin Development</h3>
       <p class="home-box-content">
-        Customise your Core Lightning node by leveraging its powerful modular architecture via plugins.
+        Customise your Palladium Lightning node by leveraging its powerful modular architecture via plugins.
       </p>
     </div>
   </a>
@@ -192,7 +192,7 @@ privacy:
       </div>
       <h3 class="home-box-title">CLN Architecture</h3>
       <p class="home-box-content">
-        Familiarise yourself with the core components of Core Lightning.
+        Familiarise yourself with the core components of Palladium Lightning.
       </p>
     </div>
   </a>

@@ -257,7 +257,7 @@ In general, you should use [synchronous replication](https://www.postgresql.org/
 > 🚧 
 > 
 > Previous versions of this document recommended this technique, but we no longer do so.
-> According to [issue 4857](https://github.com/ElementsProject/lightning/issues/4857), even with a 60-second timeout that we added in 0.10.2, this leads to constant crashing of `lightningd` in some situations. This section will be removed completely six months after 0.10.3. Consider using `--wallet=sqlite3://${main}:${backup}` above instead.
+> This technique is deprecated: it can lead to constant crashing of `lightningd` in some situations. Consider using `--wallet=sqlite3://${main}:${backup}` above instead.
 
 One of the simpler things on any system is to use Litestream to replicate the SQLite database. It continuously streams SQLite changes to file or external storage - the cloud storage option should not be used.
 

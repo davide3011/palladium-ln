@@ -6,7 +6,7 @@ content:
 privacy:
   view: public
 ---
-`reckless` is a plugin manager for Core Lightning that you can use to install and uninstall [plugins](doc:plugins) with a single command.
+`reckless` is a plugin manager for Palladium Lightning that you can use to install and uninstall [plugins](doc:plugins) with a single command.
 
 To make your plugin compatible with reckless install:
 

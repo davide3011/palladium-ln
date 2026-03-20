@@ -1,26 +1,54 @@
 ---
-title: Bitcoin Core
+title: Palladium Core
 slug: bitcoin-core
 privacy:
   view: public
 ---
 
-# Using a pruned Bitcoin Core node
+# Using palladiumd as the backend
 
-Core Lightning requires JSON-RPC access to a fully synchronized `bitcoind` in order to synchronize with the Bitcoin network.
+Palladium Lightning requires JSON-RPC access to a fully synchronized `palladiumd` in order to synchronize with the Palladium network.
 
-Access to ZeroMQ is not required and `bitcoind` does not need to be run with `txindex` like other implementations.
+Access to ZeroMQ is not required and `palladiumd` does not need to be run with `txindex`.
 
-The lightning daemon will poll `bitcoind` for new blocks that it hasn't processed yet, thus synchronizing itself with `bitcoind`.
+The lightning daemon polls `palladiumd` for new blocks that it hasn't processed yet, synchronizing itself with the chain.
 
-If `bitcoind` prunes a block that Core Lightning has not processed yet, e.g., Core Lightning was not running for a prolonged period, then `bitcoind` will not be able to serve the missing blocks, hence Core Lightning will not be able to synchronize anymore and will be stuck.
+## Docker setup (recommended)
 
-In order to avoid this situation you should be monitoring the gap between Core Lightning's blockheight using `lightning-cli getinfo` and `bitcoind`'s blockheight using `bitcoin-cli getblockchaininfo`. If the two blockheights drift apart it might be necessary to intervene.
+In the standard Docker Compose setup, `lightningd` connects to `palladiumd` over the `palladium-net` internal Docker network. The RPC credentials are provided via environment variables in `.env`:
 
-# Connecting to Bitcoin Core remotely
+```
+PALLADIUM_RPCUSER=your_rpc_user
+PALLADIUM_RPCPASSWORD=your_rpc_password
+```
 
-You can use _trusted_ third-party plugins as bitcoin backends instead of using your own node.
+The `bcli` plugin inside the container is pre-configured to reach `palladiumd` at the expected hostname and port (`2332`). No additional configuration is needed.
 
-- [sauron](https://github.com/lightningd/plugins/tree/master/sauron) is a bitcoin backend plugin relying on [Esplora](https://github.com/Blockstream/esplora).
-- [trustedcoin](https://github.com/nbd-wtf/trustedcoin) is a plugin that uses block explorers (blockstream.info, mempool.space, blockchair.com and blockchain.info) as backends instead of your own bitcoin node.
-- [bps](https://github.com/coinos/bps) is a proxy server that exposes just the RPC commands that lightning needs. There's a public endpoint at https://coinos.io/proxy or you can host your own.
+## Pruned nodes
+
+If `palladiumd` prunes a block that Palladium Lightning has not yet processed (e.g., the lightning node was offline for an extended period), `palladiumd` will not be able to serve the missing blocks and `lightningd` will stall.
+
+To avoid this, monitor the gap between Palladium Lightning's blockheight:
+
+```bash
+lcli getinfo
+```
+
+and `palladiumd`'s blockheight:
+
+```bash
+palladium-cli getblockchaininfo
+```
+
+If the two blockheights drift apart, use `--rescan` to recover (see [configuration](doc:configuration)).
+
+## Remote palladiumd
+
+If you need to connect `lightningd` to a `palladiumd` running on a different host, set the following in your `lightningd` config or `.env`:
+
+```
+bitcoin-rpcconnect=<host>
+bitcoin-rpcport=<port>
+bitcoin-rpcuser=<user>
+bitcoin-rpcpassword=<password>
+```

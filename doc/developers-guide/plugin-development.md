@@ -3,12 +3,12 @@ title: Plugin Development
 slug: plugin-development
 content:
   excerpt: >-
-    Customise your Core Lightning node by leveraging its powerful modular
+    Customise your Palladium Lightning node by leveraging its powerful modular
     architecture via plugins.
 privacy:
   view: public
 ---
-Plugins are a simple yet powerful way to extend the functionality provided by Core Lightning. They are subprocesses that are started by the main `lightningd` daemon and can interact with `lightningd` in a variety of ways:
+Plugins are a simple yet powerful way to extend the functionality provided by Palladium Lightning. They are subprocesses that are started by the main `lightningd` daemon and can interact with `lightningd` in a variety of ways:
 
 - **[Command line option passthrough](doc:a-day-in-the-life-of-a-plugin)** allows plugins to register their own command line options that are exposed through `lightningd` so that only the main process needs to be configured. Option values are not remembered when a plugin is stopped or killed, but can be passed as parameters to [`plugin start`][lightning-plugin].
 - **[JSON-RPC command passthrough](doc:json-rpc-passthrough)** adds a way for plugins to add their own commands to the JSON-RPC interface.

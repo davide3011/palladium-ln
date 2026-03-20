@@ -8,11 +8,11 @@ privacy:
 >
 > Used for applications that want to connect to CLN over the network in a secure manner.
 
-Since v0.11.0, Core Lightning provides a new interface: `cln-grpc`, a Rust-based plugin that provides a standardized API that apps, plugins, and other tools could use to interact with Core Lightning securely.
+Since v0.11.0, Palladium Lightning provides a new interface: `cln-grpc`, a Rust-based plugin that provides a standardized API that apps, plugins, and other tools could use to interact with Palladium Lightning securely.
 
 We always had a JSON-RPC, with a very exhaustive API, but it was exposed only locally over a Unix-domain socket. Some plugins chose to re-expose the API over a variety of protocols, ranging from REST to gRPC, but it was additional work to install them. The gRPC API is automatically generated from our existing JSON-RPC API, so it has the same low-level and high-level access that app devs are accustomed to but uses a more efficient binary encoding where possible and is secured via mutual TLS authentication.
 
-To use it, just add the `--grpc-port` option, and it’ll automatically start alongside Core Lightning and generate the appropriate mTLS certificates. It will listen on the configured port, authenticate clients using mTLS certificates, and will forward any request to the JSON-RPC interface, performing translations from protobuf to JSON and back.
+To use it, just add the `--grpc-port` option, and it’ll automatically start alongside Palladium Lightning and generate the appropriate mTLS certificates. It will listen on the configured port, authenticate clients using mTLS certificates, and will forward any request to the JSON-RPC interface, performing translations from protobuf to JSON and back.
 
 ## Tutorial
 
