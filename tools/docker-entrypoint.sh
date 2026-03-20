@@ -21,12 +21,12 @@ fi
 set -m
 lightningd --network="${LIGHTNINGD_NETWORK}" "$@" &
 
-echo "Core-Lightning starting"
+echo "Palladium Lightning starting"
 while read -r i; do if [ "$i" = "lightning-rpc" ]; then break; fi; done \
     < <(inotifywait -e create,open --format '%f' --quiet "${networkdatadir}" --monitor)
 
 if [ "$EXPOSE_TCP" == "true" ]; then
-    echo "Core-Lightning started, RPC available on port $LIGHTNINGD_RPC_PORT"
+    echo "Palladium Lightning started, RPC available on port $LIGHTNINGD_RPC_PORT"
 
     socat "TCP4-listen:$LIGHTNINGD_RPC_PORT,fork,reuseaddr" "UNIX-CONNECT:${networkdatadir}/lightning-rpc" &
 fi

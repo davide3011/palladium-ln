@@ -90,7 +90,7 @@ COPY --from=builder /tmp/lightning_install/ /usr/local/
 COPY tools/docker-entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-ENV LIGHTNINGD_DATA=/root/.lightning
+ENV LIGHTNINGD_DATA=/data
 ENV LIGHTNINGD_NETWORK=palladium
 ENV LIGHTNINGD_PORT=9735
 ENV LIGHTNINGD_RPC_PORT=9835
@@ -98,6 +98,6 @@ ENV EXPOSE_TCP=false
 
 EXPOSE 9735
 
-VOLUME ["/root/.lightning"]
+VOLUME ["/data"]
 
 ENTRYPOINT ["/entrypoint.sh"]

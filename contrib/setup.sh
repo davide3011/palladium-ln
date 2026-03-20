@@ -10,7 +10,7 @@
 #
 set -euo pipefail
 
-ALIAS_LINE='alias lcli="docker exec palladium-lightning lightning-cli --network=palladium"'
+ALIAS_LINE='alias lcli="docker exec palladium-lightning lightning-cli --lightning-dir=/data --network=palladium"'
 COMMENT_LINE='# Palladium Lightning CLI shortcut'
 
 # Detect shell config file

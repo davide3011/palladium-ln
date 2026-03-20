@@ -17,7 +17,7 @@
 set -euo pipefail
 
 CONTAINER="palladium-lightning"
-CLI="docker exec $CONTAINER lightning-cli --network=palladium"
+CLI="docker exec $CONTAINER lightning-cli --lightning-dir=/data --network=palladium"
 
 if ! docker ps --format '{{.Names}}' | grep -q "^${CONTAINER}$"; then
     echo "ERROR: container '$CONTAINER' is not running."

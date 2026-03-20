@@ -15,19 +15,23 @@ services:
     ports:
       - "0.0.0.0:9735:9735"   # Lightning P2P — must be reachable from the internet
       # RPC (9835) is NOT exposed on the host.
-      # Use: docker exec palladium-lightning lightning-cli --network=palladium <command>
+      # Use: docker exec palladium-lightning lightning-cli --lightning-dir=/data --network=palladium <command>
+    user: "1000:1000"
     volumes:
-      - ./.lightning:/root/.lightning
+      - ./.lightning:/data
     environment:
       LIGHTNINGD_NETWORK: palladium
+      LIGHTNINGD_DATA: /data
       EXPOSE_TCP: "false"
     command: >
+      --lightning-dir=/data
       --network=palladium
-      --palladium-rpcconnect=palladiumd
+      --palladium-rpcconnect=palladium-node
       --palladium-rpcport=2332
       --palladium-rpcuser=${PALLADIUM_RPCUSER}
       --palladium-rpcpassword=${PALLADIUM_RPCPASSWORD}
       --palladium-cli=/usr/local/bin/palladium-cli
+      --palladium-datadir=/tmp
       --log-level=info
       --bind-addr=0.0.0.0:9735
       --announce-addr-discovered=true
