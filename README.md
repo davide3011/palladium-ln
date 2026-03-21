@@ -40,7 +40,7 @@ Palladium Lightning aims to be lightweight, highly customizable, and fully compl
 - **[Advanced DB Backup](doc/beginners-guide/backup-and-recovery/advanced-db-backup.md)** — real-time replication
 
 ### Advanced Setup
-- **[Palladium Core](doc/getting-started/advanced-setup/bitcoin-core.md)** — palladiumd backend configuration
+- **[Palladium Core](doc/getting-started/advanced-setup/palladium-core.md)** — palladiumd backend configuration
 - **[Tor](doc/getting-started/advanced-setup/tor.md)** — privacy and NAT traversal with Tor
 
 ### Developer Guides

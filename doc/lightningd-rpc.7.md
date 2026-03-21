@@ -4,13 +4,13 @@ lightningd-rpc -- Lightning Daemon RPC Protocols
 SYNOPSIS
 --------
 
-**~/.lightning/bitcoin/lightning-rpc**
+**~/.lightning/palladium/lightning-rpc**
 
 DESCRIPTION
 -----------
 
 lightningd(8) communicates via RPC, especially JSONRPC over the UNIX
-domain socket (by default **$HOME/.lightning/bitcoin/lightning-rpc**,
+domain socket (by default **$HOME/.lightning/palladium/lightning-rpc**,
 but configuable with lightningd-config(5)).
 
 
@@ -110,7 +110,7 @@ referred to in addition to simple JSON types:
 * `point32`: a 64-character `hex` which represents an x-only pubkey.
 * `short_channel_id`: a string of form BLOCK "x" TXNUM "x" OUTNUM.
 * `short_channel_id_dir`: a `short_channel_id` with "/0" or "/1" appended, indicating the direction between peers.
-* `outpoint`: a string containing a `txid` followed by a ":" and an output number (bitcoind uses this form).
+* `outpoint`: a string containing a `txid` followed by a ":" and an output number (palladiumd uses this form).
 * `feerate`: an integer, or a string consisting of a number followed by "perkw" or "perkb".
 * `outputdesc`: an object containing onchain addresses as keys, and "all" or a valid `msat` field as values.
 

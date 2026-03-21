@@ -99,7 +99,7 @@ Sometimes `valgrind` will complain about code we do not control ourselves, eithe
 
 # Fuzz testing
 
-Core Lightning currently supports coverage-guided fuzz testing using [LLVM's libfuzzer](https://www.llvm.org/docs/LibFuzzer.html) when built with `clang`.
+Palladium Lightning currently supports coverage-guided fuzz testing using [LLVM's libfuzzer](https://www.llvm.org/docs/LibFuzzer.html) when built with `clang`.
 
 The goal of fuzzing is to generate mutated -and often unexpected- inputs (`seed`s) to pass to (parts of) a program (`target`) in order to make sure the codepaths used:
 
@@ -111,7 +111,7 @@ For more info about fuzzing see [here](https://github.com/google/fuzzing/tree/ma
 
 ## Build the fuzz targets
 
-In order to build the Core Lightning binaries with code coverage you will need a recent [clang](http://clang.llvm.org/). The more recent the compiler version the better.
+In order to build the Palladium Lightning binaries with code coverage you will need a recent [clang](http://clang.llvm.org/). The more recent the compiler version the better.
 
 Then you'll need to enable support at configuration time. You likely want to enable a few sanitizers for bug detections as well as experimental features for an extended coverage (not required though).
 

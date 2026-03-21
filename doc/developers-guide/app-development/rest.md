@@ -68,11 +68,11 @@ clnrest-cors-origins=https?://127.0.0.1:([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}
 With the default configurations, the Swagger user interface will be available at https://127.0.0.1:3010/. 
 The POST method requires `rune` header for authorization.
 
-- A new `rune` can be created via [createrune](https://docs.corelightning.org/reference/lightning-createrune) or the list of 
-existing runes can be retrieved with [showrunes](https://docs.corelightning.org/reference/lightning-showrunes) command.
+- A new `rune` can be created via `lcli createrune` or the list of
+existing runes can be retrieved with `lcli showrunes`.
 
-Note: in version v23.08, a parameter `Nodeid` was required to be the id of the node we're talking to (see `id (pubkey)` received 
-from [getinfo](https://docs.corelightning.org/reference/lightning-getinfo)). You can still send this for backwards compatibility, 
+Note: in version v23.08, a parameter `Nodeid` was required to be the id of the node we're talking to (see `id (pubkey)` received
+from `lcli getinfo`). You can still send this for backwards compatibility,
 but it is completely ignored.
 
 ### cURL

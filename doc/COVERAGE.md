@@ -1,12 +1,12 @@
 # Code Coverage Guide
 
-This guide explains how to measure code coverage for Core Lightning's test suite.
+This guide explains how to measure code coverage for Palladium Lightning's test suite.
 
 ## Overview
 
-Core Lightning uses Clang's source-based coverage instrumentation to measure which lines of code are executed during tests. This is particularly challenging because:
+Palladium Lightning uses Clang's source-based coverage instrumentation to measure which lines of code are executed during tests. This is particularly challenging because:
 
-- CLN is a multi-process application (lightningd + 8 daemon executables)
+- Palladium Lightning is a multi-process application (lightningd + 8 daemon executables)
 - Each test spawns multiple nodes, each running multiple daemon processes
 - Tests run in parallel (10+ workers)
 - Test processes run in temporary directories
@@ -206,7 +206,7 @@ Coverage is automatically measured nightly on the master branch via the `coverag
 5. Saves HTML reports as artifacts (90-day retention)
 
 You can view:
-- **Codecov dashboard**: [codecov.io/gh/ElementsProject/lightning](https://codecov.io/gh/ElementsProject/lightning)
+- **Codecov dashboard**: upstream reference — [codecov.io/gh/ElementsProject/lightning](https://codecov.io/gh/ElementsProject/lightning)
 - **HTML artifacts**: Download from GitHub Actions workflow runs
 
 ## Troubleshooting

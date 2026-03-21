@@ -1,14 +1,14 @@
 ---
-title: CLN Architecture
+title: Palladium Lightning Architecture
 slug: contribute-to-core-lightning
 content:
-  excerpt: Familiarise yourself with the core components of Core Lightning.
+  excerpt: Familiarise yourself with the core components of Palladium Lightning.
 privacy:
   view: public
 ---
-The Core Lightning project implements the lightning protocol as specified in [various BOLTs](https://github.com/lightning/bolts). It's broken into subdaemons, with the idea being that we can add more layers of separation between different clients and extra barriers to exploits.
+The Palladium Lightning project implements the lightning protocol as specified in [various BOLTs](https://github.com/lightning/bolts). It's broken into subdaemons, with the idea being that we can add more layers of separation between different clients and extra barriers to exploits.
 
-To read the code, you should start from [lightningd.c](https://github.com/ElementsProject/lightning/blob/master/lightningd/lightningd.c) and hop your way through the '~' comments at the head of each daemon in the suggested order.
+To read the code, you should start from `lightningd/lightningd.c` and hop your way through the '~' comments at the head of each daemon in the suggested order.
 
 ## The Components
 
@@ -69,17 +69,17 @@ Here's a list of parts, with notes:
 
 ## Database
 
-Core Lightning state is persisted in `lightning-dir`. It is a sqlite database stored in the `lightningd.sqlite3` file, typically under `~/.lightning/<network>/`.
+Palladium Lightning state is persisted in `lightning-dir`. It is a sqlite database stored in the `lightningd.sqlite3` file, typically under `~/.lightning/<network>/`.
 
 You can run queries against this file like so:
 ```shell
-$ sqlite3 ~/.lightning/bitcoin/lightningd.sqlite3 \
+$ sqlite3 ~/.lightning/palladium/lightningd.sqlite3 \
   "SELECT HEX(prev_out_tx), prev_out_index, status FROM outputs"
 ```
 
 Or you can launch into the sqlite3 repl and check things out from there:
 ```shell
-$ sqlite3 ~/.lightning/bitcoin/lightningd.sqlite3
+$ sqlite3 ~/.lightning/palladium/lightningd.sqlite3
 SQLite version 3.21.0 2017-10-24 18:55:49
 Enter ".help" for usage hints.
 sqlite> .tables
@@ -92,13 +92,13 @@ sqlite> .schema outputs
 
 Some data is stored as raw bytes, use `HEX(column)` to pretty print these.
 
-Make sure that clightning is not running when you query the database, as some queries may lock the database and cause crashes.
+Make sure that lightningd is not running when you query the database, as some queries may lock the database and cause crashes.
 
 #### Common variables
 
 Table `vars` contains global variables used by lightning node.
 ```shell
-$ sqlite3 ~/.lightning/bitcoin/lightningd.sqlite3
+$ sqlite3 ~/.lightning/palladium/lightningd.sqlite3
 SQLite version 3.21.0 2017-10-24 18:55:49
 Enter ".help" for usage hints.
 sqlite> .headers on

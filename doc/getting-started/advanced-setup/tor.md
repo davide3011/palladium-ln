@@ -263,9 +263,9 @@ There is an older method, called "autotor" instead of "statictor" which creates 
 | ------ | ------------- | ----------------------- | ----------------------- |
 | 1      | Public        | NO                      | Outgoing                |
 | 2      | Public        | FIXED BY TOR            | Incoming [1]            |
-| 3      | Public        | FIXED BY CORE LIGHTNING | Incoming [1]            |
+| 3      | Public        | FIXED BY PALLADIUM LIGHTNING | Incoming [1]            |
 | 4      | Not Announced | FIXED BY TOR            | Incoming [1]            |
-| 5      | Not Announced | FIXED BY CORE LIGHTNING | Incoming [1]            |
+| 5      | Not Announced | FIXED BY PALLADIUM LIGHTNING | Incoming [1]            |
 
 > 📘 
 > 

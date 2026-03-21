@@ -29,7 +29,7 @@ reckless will exit early in the event that:
 
 Reckless-installed plugins reside in the 'reckless' subdirectory
 of the user's `.lightning` folder.  By default, plugins are activated
-on the `bitcoin` network (and use lightningd's bitcoin network
+on the `palladium` network (and use lightningd's palladium network
 config), but regtest may also be used.
 
 Other commands include:
@@ -79,14 +79,13 @@ Available option flags:
 	pass the config used by lightningd
 
 **-r**, **--regtest**
-	use the regtest network and config instead of bitcoin mainnet
+	use the regtest network and config instead of palladium mainnet
 
 **-v**, **--verbose**
 	request additional debug output
 
 **--network**=*network*
-	specify bitcoin, regtest, liquid, liquid-regtest, signet,
-	or testnet networks. (default: bitcoin)
+	specify palladium or regtest network. (default: palladium)
 
 NOTES
 -----
@@ -94,8 +93,8 @@ NOTES
 Reckless currently supports python, rust, and javascript plugins.
 
 Running the first time will prompt the user that their lightningd's
-bitcoin config will be appended (or created) to inherit the reckless
-config file (this config is specific to bitcoin by default.)
+palladium config will be appended (or created) to inherit the reckless
+config file (this config is specific to palladium by default.)
 Management of plugins will subsequently modify this file.
 
 
@@ -156,4 +155,4 @@ reckless(7), Core-Lightning plugins repo: [https://github.com/lightningd/plugins
 RESOURCES
 ---------
 
-Main web site: [https://github.com/ElementsProject/lightning](https://github.com/ElementsProject/lightning)
+Main web site: [https://github.com/ElementsProject/lightning](https://github.com/ElementsProject/lightning) (upstream Core Lightning)

@@ -11,7 +11,7 @@ DESCRIPTION
 
 When lightningd(8) starts up it usually reads a general configuration
 file (default: **$HOME/.lightning/config**) then a network-specific
-configuration file (default: **$HOME/.lightning/bitcoin/config**).  This can
+configuration file (default: **$HOME/.lightning/palladium/config**).  This can
 be changed: see *--conf* and *--lightning-dir*.
 
 Note that some configuration options, marked *dynamic* can be changed at runtime: see lightning-setconfig(7): by default this will write to a file called **config.setconfig** in the network-specific lightning directory, unless there is another config file with a name ending in ".setconfig".
@@ -68,8 +68,8 @@ page.
 
 * **database-upgrade**=*BOOL*
 
-  Upgrades to Core Lightning often change the database: once this is done,
-downgrades are not generally possible.  By default, Core Lightning will
+  Upgrades to Palladium Lightning often change the database: once this is done,
+downgrades are not generally possible.  By default, Palladium Lightning will
 exit with an error rather than upgrade, unless this is an official released
 version.  If you really want to upgrade to a non-release version, you can
 set this to *true* (or *false* to never allow a non-reversible upgrade!).
@@ -120,39 +120,39 @@ This is not valid within the per-network configuration file.
 
   Alias for *network=signet*.
 
-* **bitcoin-cli**=*PATH* [plugin `bcli`]
+* **palladium-cli**=*PATH* [plugin `bcli`]
 
-  The name of *bitcoin-cli* executable to run.
+  The name of *palladium-cli* executable to run.
 
-* **bitcoin-datadir**=*DIR* [plugin `bcli`]
+* **palladium-datadir**=*DIR* [plugin `bcli`]
 
-  *-datadir* argument to supply to bitcoin-cli(1).
+  *-datadir* argument to supply to palladium-cli(1).
 
-* **bitcoin-rpcuser**=*USER* [plugin `bcli`]
+* **palladium-rpcuser**=*USER* [plugin `bcli`]
 
-  The RPC username for talking to bitcoind(1).
+  The RPC username for talking to palladiumd(1).
 
-* **bitcoin-rpcpassword**=*PASSWORD* [plugin `bcli`]
+* **palladium-rpcpassword**=*PASSWORD* [plugin `bcli`]
 
-  The RPC password for talking to bitcoind(1).
+  The RPC password for talking to palladiumd(1).
 
-* **bitcoin-rpcconnect**=*HOST* [plugin `bcli`]
+* **palladium-rpcconnect**=*HOST* [plugin `bcli`]
 
-  The bitcoind(1) RPC host to connect to.
+  The palladiumd(1) RPC host to connect to.
 
-* **bitcoin-rpcport**=*PORT* [plugin `bcli`]
+* **palladium-rpcport**=*PORT* [plugin `bcli`]
 
-  The bitcoind(1) RPC port to connect to.
+  The palladiumd(1) RPC port to connect to.
 
-* **bitcoin-rpcclienttimeout**=*SECONDS* [plugin `bcli`]
+* **palladium-rpcclienttimeout**=*SECONDS* [plugin `bcli`]
 
-  The bitcoind(1) RPC client timeout in seconds. Default is set to 60
-instead of 900 to match bitcoin-retry-timeout default. When set
-explicitly, the higher value of it and bitcoin-retry-timeout is used.
+  The palladiumd(1) RPC client timeout in seconds. Default is set to 60
+instead of 900 to match palladium-retry-timeout default. When set
+explicitly, the higher value of it and palladium-retry-timeout is used.
 
-* **bitcoin-retry-timeout**=*SECONDS* [plugin `bcli`]
+* **palladium-retry-timeout**=*SECONDS* [plugin `bcli`]
 
-  Number of seconds to keep trying a bitcoin-cli(1) command. If the
+  Number of seconds to keep trying a palladium-cli(1) command. If the
 command keeps failing after this time, exit with a fatal error.
 
 * **rescan**=*BLOCKS*
@@ -278,11 +278,11 @@ name, including a scheme such as `sqlite3` or `postgres` followed by the
 connection parameters.
 
   The default wallet corresponds to the following DSN:
-  `--wallet=sqlite3://$HOME/.lightning/bitcoin/lightningd.sqlite31`
+  `--wallet=sqlite3://$HOME/.lightning/palladium/lightningd.sqlite3`
 
   For the `sqlite3` scheme, you can specify a single backup database file
 by separating it with a `:` character, like so:
-  `--wallet=sqlite3://$HOME/.lightning/bitcoin/lightningd.sqlite3:/backup/lightningd.sqlite3`
+  `--wallet=sqlite3://$HOME/.lightning/palladium/lightningd.sqlite3:/backup/lightningd.sqlite3`
 
   The following is an example of a postgresql wallet DSN:
 
@@ -400,12 +400,12 @@ usually treat them as the minimum (253 sats/kw) if we can't get them.
 This allows override of one or more of our standard feerates (see
 lightning-feerates(7)).  Up to 5 values, separated by '/' can be
 provided: if fewer are provided, then the final value is used for the
-remainder.  The values are in per-kw (roughly 1/4 of bitcoind's per-kb
+remainder.  The values are in per-kw (roughly 1/4 of palladiumd's per-kb
 values), and the order is "opening", "mutual\_close", "unilateral\_close",
 "delayed\_to\_us", "htlc\_resolution", and "penalty".
 
   You would usually put this option in the per-chain config file, to avoid
-setting it on Bitcoin mainnet!  e.g. `~rusty/.lightning/regtest/config`.
+setting it on Palladium mainnet!  e.g. `~/.lightning/regtest/config`.
 
 * **htlc-minimum-msat**=*MILLISATOSHI*
 
@@ -570,12 +570,12 @@ command, so they invoices can also be paid onchain.
 ### Networking options
 
 Note that for simple setups, the implicit *autolisten* option does the
-right thing: for the mainnet (bitcoin) network it will try to bind to
+right thing: for the Palladium mainnet it will try to bind to
 port 9735 on IPv4 and IPv6, and will announce it to peers if it seems
 like a public address (and other default ports for other networks,
 as described below).
 
-Core Lightning also support IPv4/6 address discovery behind NAT routers.
+Palladium Lightning also support IPv4/6 address discovery behind NAT routers.
 If your node detects an new public address, it will update its announcement.
 For this to work you need to forward the default TCP port 9735 to your node.
 IP discovery is only active if no other addresses are announced.
@@ -595,17 +595,15 @@ IPv6 on all interfaces, '0.0.0.0' means bind to all IPv4
 interfaces, '::' means 'bind to all IPv6 interfaces' (if you want to
 specify an IPv6 address *and* a port, use `[]` around the IPv6
 address, like `[::]:9750`).
-  If 'PORT' is not specified, the default port 9735 is used for mainnet
-(testnet: 19735, signet: 39735, regtest: 19846, testnet4: 49735).
+  If 'PORT' is not specified, the default port 9735 is used for Palladium
+mainnet (regtest: 19846).
 If we can determine a public IP address from the resulting binding,
 the address is announced.
 
   If the argument begins with 'autotor:' then it is followed by the
 IPv4 or IPv6 address of the Tor control port (default port 9051),
 and this will be used to configure a Tor hidden service for port 9735
-in case of mainnet (bitcoin) network whereas other networks (testnet,
-testnet4, signet, regtest) will set the same default ports they use for
-non-Tor addresses (see above).
+in case of Palladium mainnet whereas regtest will use port 19846.
 The Tor hidden service will be configured to point to the
 first IPv4 or IPv6 address we bind to and is by default unique to
 your node's id.
@@ -756,7 +754,7 @@ additional paths too:
 
 * **plugin**=*PATH*
 
-  Specify a plugin to run as part of Core Lightning. This can be specified
+  Specify a plugin to run as part of Palladium Lightning. This can be specified
 multiple times to add multiple plugins.  Note that unless plugins themselves
 specify ordering requirements for being called on various hooks, plugins will
 be ordered by commandline, then config file.
@@ -787,13 +785,13 @@ load plugins which have been disabled, using lightning-plugin(7) `start`.
 
 * **important-plugin**=*PLUGIN*
 
-  Speciy a plugin to run as part of Core Lightning.
+  Specify a plugin to run as part of Palladium Lightning.
 This can be specified multiple times to add multiple plugins.
 Plugins specified via this option are considered so important, that if the
 plugin stops for any reason (including via lightning-plugin(7) `stop`),
-Core Lightning will also stop running.
+Palladium Lightning will also stop running.
 This way, you can monitor crashes of important plugins by simply monitoring
-if Core Lightning terminates.
+if Palladium Lightning terminates.
 Built-in plugins, which are installed with lightningd(8), are automatically
 considered important.
 
@@ -874,7 +872,7 @@ lightning-hsmtool(8)
 RESOURCES
 ---------
 
-Main web site: [https://github.com/ElementsProject/lightning](https://github.com/ElementsProject/lightning)
+Main web site: [https://github.com/ElementsProject/lightning](https://github.com/ElementsProject/lightning) (upstream Core Lightning)
 
 COPYING
 -------

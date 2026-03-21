@@ -24,7 +24,7 @@ The following steps will get you up and running with Palladium Lightning:
 
 - [x] **Palladium Core**
 
-  Palladium Lightning requires a running `palladiumd` instance that is fully synced with the Palladium network, connected to the `palladium-net` Docker network. See [Palladium Core setup](doc:bitcoin-core) for details.
+  Palladium Lightning requires a running `palladiumd` instance that is fully synced with the Palladium network, connected to the `palladium-net` Docker network. See [Palladium Core setup](doc:palladium-core) for details.
 
 ## 2. [Install](doc:installation) Palladium Lightning
 

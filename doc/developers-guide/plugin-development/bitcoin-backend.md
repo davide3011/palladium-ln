@@ -6,11 +6,11 @@ privacy:
 ---
 Palladium Lightning communicates with the Palladium network through a plugin. It uses the `bcli` plugin by default but you can use a custom one, multiple custom ones for different operations, or write your own for your favourite Palladium data source!
 
-Communication with the plugin is done through 5 JSONRPC commands, `lightningd` can use from 1 to 5 plugin(s) registering these 5 commands for gathering Bitcoin data. Each plugin must follow the below specification for `lightningd` to operate.
+Communication with the plugin is done through 5 JSONRPC commands, `lightningd` can use from 1 to 5 plugin(s) registering these 5 commands for gathering Palladium data. Each plugin must follow the below specification for `lightningd` to operate.
 
 ### `getchaininfo`
 
-Called at startup, it's used to check the network `lightningd` is operating on and to get the sync status of the backend. Optionally, the plugins can use `last_height` to make sure that the Bitcoin backend is not behind Palladium Lightning.
+Called at startup, it's used to check the network `lightningd` is operating on and to get the sync status of the backend. Optionally, the plugins can use `last_height` to make sure that the Palladium backend is not behind Palladium Lightning.
 
 The plugin must respond to `getchaininfo` with the following fields:  
     - `chain` (string), the network name as introduced in bip70  

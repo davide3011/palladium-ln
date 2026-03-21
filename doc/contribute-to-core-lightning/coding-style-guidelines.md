@@ -147,7 +147,7 @@ Changing existing input parameters is harder, and should generally be avoided.  
 
 ## Github Workflows: Pull Requests
 
-We have adopted a number of workflows to facilitate the development of Core Lightning, and to make things more pleasant for contributors.
+We have adopted a number of workflows to facilitate the development of Palladium Lightning, and to make things more pleasant for contributors.
 
 ### Draft Requests Don't Get Reviewed
 

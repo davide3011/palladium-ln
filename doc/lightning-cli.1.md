@@ -152,7 +152,7 @@ Rusty Russell [rusty@rustcorp.com.au](mailto:rusty@rustcorp.com.au) is mainly to
 RESOURCES
 ---------
 
-Main web site: [https://github.com/ElementsProject/lightning](https://github.com/ElementsProject/lightning)
+Main web site: [https://github.com/ElementsProject/lightning](https://github.com/ElementsProject/lightning) (upstream Core Lightning)
 
 COPYING
 -------

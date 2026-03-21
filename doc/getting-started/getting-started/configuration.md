@@ -66,31 +66,35 @@ The [`listconfigs`](ref:listconfigs) command will output a valid configuration f
 - Select the network parameters (_palladium_ or _regtest_).
   This is not valid within the per-network configuration file.
 
-- **bitcoin-cli**=_PATH_ [plugin `bcli`]
+- **palladium-cli**=_PATH_ [plugin `bcli`]
 
   The name of _palladium-cli_ executable to run.
 
-- **bitcoin-datadir**=_DIR_ [plugin `bcli`]
+- **palladium-datadir**=_DIR_ [plugin `bcli`]
 
   _-datadir_ argument to supply to palladium-cli(1).
 
-- **bitcoin-rpcuser**=_USER_ [plugin `bcli`]
+- **palladium-rpcuser**=_USER_ [plugin `bcli`]
 
   The RPC username for talking to palladiumd(1).
 
-- **bitcoin-rpcpassword**=_PASSWORD_ [plugin `bcli`]
+- **palladium-rpcpassword**=_PASSWORD_ [plugin `bcli`]
 
   The RPC password for talking to palladiumd(1).
 
-- **bitcoin-rpcconnect**=_HOST_ [plugin `bcli`]
+- **palladium-rpcconnect**=_HOST_ [plugin `bcli`]
 
   The palladiumd(1) RPC host to connect to.
 
-- **bitcoin-rpcport**=_PORT_ [plugin `bcli`]
+- **palladium-rpcport**=_PORT_ [plugin `bcli`]
 
   The palladiumd(1) RPC port to connect to.
 
-- **bitcoin-retry-timeout**=_SECONDS_ [plugin `bcli`]
+- **palladium-rpcclienttimeout**=_SECONDS_ [plugin `bcli`]
+
+  Timeout in seconds for palladiumd RPC HTTP requests.
+
+- **palladium-retry-timeout**=_SECONDS_ [plugin `bcli`]
 
   Number of seconds to keep trying a palladium-cli(1) command. If the
   command keeps failing after this time, exit with a fatal error.
@@ -196,10 +200,10 @@ The [`listconfigs`](ref:listconfigs) command will output a valid configuration f
 
   Identify the location of the wallet. This is a fully qualified data source name, including a scheme such as `sqlite3` or `postgres` followed by the connection parameters.
 
-  The default wallet corresponds to the following DSN:  
-    `--wallet=sqlite3://$HOME/.lightning/bitcoin/lightningd.sqlite31`
+  The default wallet corresponds to the following DSN:
+    `--wallet=sqlite3://$HOME/.lightning/palladium/lightningd.sqlite3`
 
-  For the `sqlite3` scheme, you can specify a single backup database file by separating it with a `:` character, like so:  `--wallet=sqlite3://$HOME/.lightning/bitcoin/lightningd.sqlite3:/backup/lightningd.sqlite3`
+  For the `sqlite3` scheme, you can specify a single backup database file by separating it with a `:` character, like so:  `--wallet=sqlite3://$HOME/.lightning/palladium/lightningd.sqlite3:/backup/lightningd.sqlite3`
 
   The following is an example of a postgresql wallet DSN:
 
@@ -359,7 +363,7 @@ Note: prior to v22.11, forwards for channels which were closed were not easily d
 
 ### Networking options
 
-Note that for simple setups, the implicit _autolisten_ option does the right thing: for the mainnet (bitcoin) network it will try to bind to port 9735 on IPv4 and IPv6, and will announce it to peers if it seems like a public address (and other default ports for other networks, as described below).
+Note that for simple setups, the implicit _autolisten_ option does the right thing: for the Palladium mainnet it will try to bind to port 9735 on IPv4 and IPv6, and will announce it to peers if it seems like a public address (and other default ports for other networks, as described below).
 
 Palladium Lightning also support IPv4/6 address discovery behind NAT routers. If your node detects an new public address, it will update its announcement. For this to work you need to forward the default TCP port 9735 to your node. IP discovery is only active if no other addresses are announced.
 
@@ -370,11 +374,10 @@ You can instead use _addr_ to override this (eg. to change the port), or precise
   Set an IP address (v4 or v6) or automatic Tor address to listen on and (maybe) announce as our node address.
 
   An empty 'IPADDRESS' is a special value meaning bind to IPv4 and/or IPv6 on all interfaces, '0.0.0.0' means bind to all IPv4 interfaces, '::' means 'bind to all IPv6 interfaces' (if you want to specify an IPv6 address _and_ a port, use `[]` around the IPv6 address, like `[::]:9750`).  
-  If 'PORT' is not specified, the default port 9735 is used for mainnet (testnet: 19735, signet: 39735, regtest: 19846, testnet4: 49735). If we can determine a public IP address from the resulting binding,  
+  If 'PORT' is not specified, the default port 9735 is used for Palladium mainnet (regtest: 19846). If we can determine a public IP address from the resulting binding,
   the address is announced.
 
-  If the argument begins with 'autotor:' then it is followed by the IPv4 or IPv6 address of the Tor control port (default port 9051), and this will be used to configure a Tor hidden service for port 9735 in case of mainnet (bitcoin) network whereas other networks (testnet,  
-  signet, regtest, testnet4) will set the same default ports they use for non-Tor addresses (see above).  
+  If the argument begins with 'autotor:' then it is followed by the IPv4 or IPv6 address of the Tor control port (default port 9051), and this will be used to configure a Tor hidden service for port 9735 in case of Palladium mainnet whereas regtest will use port 19846.  
   The Tor hidden service will be configured to point to the first IPv4 or IPv6 address we bind to and is by default unique to your node's id.
 
   If the argument begins with 'statictor:' then it is followed by the IPv4 or IPv6 address of the Tor control port (default port 9051), and this will be used to configure a static Tor hidden service.  

@@ -11,7 +11,7 @@ lightningd [--conf=<config-file>] [OPTIONS]
 DESCRIPTION
 -----------
 
-**lightningd** starts the Core Lightning daemon, which implements a
+**lightningd** starts the Palladium Lightning daemon, which implements a
 standards-compliant Lightning Network node.
 
 CONFIGURATION OPTIONS
@@ -22,7 +22,7 @@ Specify configuration file. If not an absolute path, will be relative
 from the lightning-dir location. Defaults to *config*.
 
 * **--lightning-dir**=*DIR*
-Set the directory for the Core Lightning daemon. Defaults to
+Set the directory for the Palladium Lightning daemon. Defaults to
 *$HOME/.lightning*.
 
 MORE OPTIONS
@@ -35,23 +35,23 @@ configuration file, so `foo` in the configuration file simply becomes
 See lightningd-config(5) for a comprehensive list of all available
 options.
 
-LOGGING AND COMMANDING CORE LIGHTNING
--------------------------------------
+LOGGING AND COMMANDING PALLADIUM LIGHTNING
+------------------------------------------
 
-By default, Core Lightning will log to the standard output.
+By default, Palladium Lightning will log to the standard output.
 To log to a specific file, use **--log-file**=*PATH*.
-Sending SIGHUP will cause Core Lightning to reopen this file,
+Sending SIGHUP will cause Palladium Lightning to reopen this file,
 for example to do log rotation.
 
-Core Lightning will set up a Unix domain socket for receiving
+Palladium Lightning will set up a Unix domain socket for receiving
 commands.
 By default this will be the file **lightning-rpc** in your
 specified **lightning-dir**.
-You can use lightning-cli(1) to send commands to Core Lightning
+You can use lightning-cli(1) to send commands to Palladium Lightning
 once **lightningd** has started; you need to match the
 **--lightning-dir** and **--rpc-file** options between them.
 
-Commands for Core Lightning are described in various manpages
+Commands for Palladium Lightning are described in various manpages
 in section 7, with the common prefix **lightning-**.
 
 QUICK START
@@ -61,14 +61,14 @@ First, decide on and create a directory for *lightning-dir*, or just use
 the default *$HOME/.lightning*. Then create a *config* file in this
 directory containing your configuration.
 
-Your other main preparation would be to set up a mainnet Bitcoin
-fullnode, i.e. run a bitcoind(1) instance. The rest of this quick start
+Your other main preparation would be to set up a Palladium fullnode,
+i.e. run a palladiumd(1) instance. The rest of this quick start
 guide will assume you are reckless and want to spend real funds on
-Lightning: otherwise indicate *network=testnet* in your *config* file explicitly.
+Lightning: otherwise indicate *network=regtest* in your *config* file explicitly.
 
-Core Lightning needs to communicate with the Bitcoin Core RPC. You can set
-this up using *bitcoin-datadir*, *bitcoin-rpcconnect*,
-*bitcoin-rpcport*, *bitcoin-rpcuser*, and *bitcoin-rpcpassword* options
+Palladium Lightning needs to communicate with the Palladium RPC. You can set
+this up using *palladium-datadir*, *palladium-rpcconnect*,
+*palladium-rpcport*, *palladium-rpcuser*, and *palladium-rpcpassword* options
 in your *config* file.
 
 Finally, just to keep yourself sane, decide on a log file name and
@@ -76,7 +76,7 @@ indicate it using *log-file=lightningd.log* in your *config* file. You
 might be interested in viewing it periodically as you follow along on
 this guide.
 
-Once the **bitcoind** instance is running, start lightningd(8):
+Once the **palladiumd** instance is running, start lightningd(8):
 
     $ lightningd --lightning-dir=$HOME/.lightning --daemon
 
@@ -91,13 +91,13 @@ Check if things are working:
 The **getinfo** command in particular will return a *blockheight* field,
 which indicates the block height to which **lightningd** has been
 synchronized to (this is separate from the block height that your
-**bitcoind** has been synchronized to, and will always lag behind
-**bitcoind**). You will have to wait until the *blockheight* has reached
-the actual blockheight of the Bitcoin network.
+**palladiumd** has been synchronized to, and will always lag behind
+**palladiumd**). You will have to wait until the *blockheight* has reached
+the actual blockheight of the Palladium network.
 
 Before you can get funds offchain, you need to have some funds onchain
 owned by **lightningd** (which has a separate wallet from the
-**bitcoind** it connects to). Get an address for **lightningd** via
+**palladiumd** it connects to). Get an address for **lightningd** via
 lightning-newaddr(7) command as below (*--lightning-dir* option has been
 elided, specify it if you selected your own *lightning-dir*):
 
@@ -190,7 +190,7 @@ lightning-hsmtool(8)
 RESOURCES
 ---------
 
-Main web site: [https://github.com/ElementsProject/lightning](https://github.com/ElementsProject/lightning)
+Main web site: [https://github.com/ElementsProject/lightning](https://github.com/ElementsProject/lightning) (upstream Core Lightning)
 
 COPYING
 -------

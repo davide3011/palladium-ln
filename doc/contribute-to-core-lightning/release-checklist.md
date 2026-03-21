@@ -38,7 +38,7 @@ Here's a checklist for the release process.
 10. Prepare release notes draft including information from above step, and share with the team for editing.
 11. Upgrade your personal nodes to the rc1, to help testing.
 12. Github action `Publish Python 🐍 distributions 📦 to PyPI and TestPyPI` uploads the pyln modules on test PyPI server. Make sure that the action has been triggered with RC tag and that the modules have been published on `https://test.pypi.org/project/pyln-*/#history`.
-13. Docker image publishing is handled by the GitHub action `Build and push multi-platform docker images`. Ensure that this action is triggered and that the RC image has been successfully uploaded to Docker Hub after the action completes. Alternatively, you can publish Docker images by running the `tools/build-release.sh docker` script. The GitHub action takes approximately 3-4 hours, while the script takes about 6-7 hours. It is highly recommended to test your Docker setup if you haven't done so before. Prior to building docker images by `tools/build-release.sh` script, ensure that `multiarch/qemu-user-static` setup is working on your system as described [here](https://docs.corelightning.org/docs/docker-images#setting-up-multiarchqemu-user-static).
+13. Build the Docker image locally with `docker compose build` and verify it starts correctly.
 
 ## Releasing -rc2, ..., -rcN
 
@@ -69,9 +69,9 @@ Here's a checklist for the release process.
 7. Run `tools/build-release.sh bin-Fedora bin-Ubuntu sign` (with `--sudo` if you need root to run Docker) to:
    - Create reproducible zipfile
    - Build reproducible Fedora image
-   - Build reproducible Ubuntu-v20.04, Ubuntu-v22.04 and Ubuntu-v24.04 images. Follow [link](https://docs.corelightning.org/docs/repro#building-using-the-builder-image) for manually Building Ubuntu Images.
-   - Build Docker images for amd64 and arm64v8. Follow [link](https://docs.corelightning.org/docs/docker-images) for more details on Docker publishing.
-   - Create and sign checksums. Follow [link](https://docs.corelightning.org/docs/repro#co-signing-the-release-manifest) for manually signing the release.
+   - Build reproducible Ubuntu-v20.04, Ubuntu-v22.04 and Ubuntu-v24.04 images.
+   - Build the Palladium Lightning Docker image with `docker compose build`.
+   - Create and sign checksums.
 8. If you used `--sudo`, the tarballs may be owned by root, so revert ownership if necessary: `sudo chown ${USER}:${USER} *${VERSION}*`
 9. Verify the checksums match the pre-release `SHA256SUMS-v<VERSION>`, then append your signatures to the official signature `SHA256SUMS-v<VERSION>.asc` file to confirm the build's integrity.
 10. Send `SHA256SUMS-v<VERSION>` & `SHA256SUMS-v<VERSION>.asc` files to the rest of the team to check and sign the release.
@@ -79,13 +79,13 @@ Here's a checklist for the release process.
    - Copy the release captain's `SHA256SUMS-v<VERSION>` and `SHA256SUMS-v<VERSION>.asc` into the root folder (`lightning`).
    - Run `tools/build-release.sh --verify`. It will create reproducible images, verify checksums and sign.
    - Send your signatures from `release/SHA256SUMS-v<VERSION>.asc` to release captain.
-   - Or follow [link](https://docs.corelightning.org/docs/repro#verifying-a-reproducible-build) for manual verification instructions.
+   - Or follow the repro build documentation at [doc:repro] for manual verification instructions.
 12. Append signatures shared by the team into the `SHA256SUMS-v<VERSION>.asc` file, verify with `gpg --verify SHA256SUMS-v<VERSION>.asc` and include the file in the draft release.
 13. The GitHub action `Publish Python 🐍 distributions 📦 to PyPI and TestPyPI` should upload the pyln modules to pypi.org. However, this can also be done manually by running `uv run make pyln-release`. This process requires keys for each of the `pyln-client`, `pyln-proto`, and `pyln-testing` modules to be accessible to uv. You can set the key as an environment variable and build and publish each pyln release independently:
     - `export UV_PUBLISH_TOKEN=<pyln-client token>`
     - `uv run make pyln-release-client`
     - ... repeat for each pyln package with the appropriate token.
-14. Publish multi-arch Docker images (`elementsproject/lightningd:v${VERSION}` and `elementsproject/lightningd:latest`) to Docker Hub either using the GitHub action `Build and push multi-platform docker images` or by running the `tools/build-release.sh docker` script. Prior to building docker images by `tools/build-release.sh` script, ensure that `multiarch/qemu-user-static` setup is working on your system as described [here](https://docs.corelightning.org/docs/docker-images#setting-up-multiarchqemu-user-static).
+14. Build the Palladium Lightning Docker image locally using `docker compose build` and tag it appropriately for the release.
 
 ## Performing the Release
 

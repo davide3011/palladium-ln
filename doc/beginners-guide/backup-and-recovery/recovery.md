@@ -16,7 +16,7 @@ privacy:
   - Copy the valid binary formatted `hsm_secret` into `$LIGHTNINGDIR` directory
   - Copy the latest `emergency.recover` backup file into the `$LIGHTNINGDIR` before starting up the node
   - Start `lightningd`
-  - Run `lightning-cli emergencyrecover` (RPC command)[https://docs.corelightning.org/reference/lightning-emergencyrecover] to recover all the channels on the node
+  - Run `lcli emergencyrecover` to recover all the channels on the node
   - Wait until your peer force closes the channel and the node would automatically sweep the funds. This could take some time
 
 
@@ -26,7 +26,7 @@ privacy:
   - Start `lightningd --recover=<codex32secret>`. It will automatically generate your node's hsm_secret using the codex32 secret
   - The node will initiate in offline mode. As a result, it won't establish connections with peers automatically
   - Restart `lightningd`
-  - Run `lightning-cli emergencyrecover` (RPC command)[https://docs.corelightning.org/reference/lightning-emergencyrecover] to recover all the channels on the node
+  - Run `lcli emergencyrecover` to recover all the channels on the node
 
 
 > 🚧 

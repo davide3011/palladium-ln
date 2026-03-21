@@ -23,14 +23,14 @@ To recover in-channel funds, you need to use one or more of the backup strategie
 
 When using the SQLITE3 backend (the default), you can specify a second database file to replicate to, by separating the second file with a single `:` character in the `--wallet` option, after the main database filename.
 
-For example, if the user running `lightningd` is named `user`, and you are on the Bitcoin mainnet with the default `${LIGHTNINGDIR}`, you can specify in your `config` file:
+For example, if the user running `lightningd` is named `user`, and you are on the Palladium mainnet with the default `${LIGHTNINGDIR}`, you can specify in your `config` file:
 ```shell
-wallet=sqlite3:///home/user/.lightning/bitcoin/lightningd.sqlite3:/my/backup/lightningd.sqlite3
+wallet=sqlite3:///home/user/.lightning/palladium/lightningd.sqlite3:/my/backup/lightningd.sqlite3
 ```
 
 Or via command line:
 ```
-lightningd --wallet=sqlite3:///home/user/.lightning/bitcoin/lightningd.sqlite3:/my/backup/lightningd.sqlite3
+lightningd --wallet=sqlite3:///home/user/.lightning/palladium/lightningd.sqlite3:/my/backup/lightningd.sqlite3
 ```
 
 If the second database file does not exist but the directory that would contain it does exist, the file is created.
@@ -277,7 +277,7 @@ Then just restart `lightningd`.
 /etc/litestream.yml :
 ```shell
 dbs:
- - path: /home/bitcoin/.lightning/bitcoin/lightningd.sqlite3
+ - path: /home/palladium/.lightning/palladium/lightningd.sqlite3
    replicas:
      - path: /media/storage/lightning_backup
 ```

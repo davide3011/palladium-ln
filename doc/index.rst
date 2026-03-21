@@ -1,11 +1,9 @@
-Core Lightning Documentation
-============================
+Palladium Lightning Documentation
+==================================
 
 .. toctree::
    :maxdepth: 1
    :caption: Main Documentation
-
-   https://docs.corelightning.org/docs
 
 .. toctree::
    :maxdepth: 1

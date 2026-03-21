@@ -120,11 +120,11 @@ lightningd(8), lightningd-config(5)
 RESOURCES
 ---------
 
-Main web site: [https://github.com/ElementsProject/lightning](https://github.com/ElementsProject/lightning)
+Main web site: [https://github.com/ElementsProject/lightning](https://github.com/ElementsProject/lightning) (upstream Core Lightning)
 
 COPYING
 -------
 
 Note: the modules in the ccan/ directory have their own licenses, but
 the rest of the code is covered by the BSD-style MIT license.
-Main web site: [https://github.com/ElementsProject/lightning](https://github.com/ElementsProject/lightning)
+Main web site: [https://github.com/ElementsProject/lightning](https://github.com/ElementsProject/lightning) (upstream Core Lightning)

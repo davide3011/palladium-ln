@@ -29,7 +29,7 @@ cp .env.example .env
 ## 2. Build the image
 
 ```bash
-docker build -f Dockerfile.palladium-lightning -t palladium-lightning:local .
+docker build -t palladium-lightning:local .
 ```
 
 ## 3. Start the node

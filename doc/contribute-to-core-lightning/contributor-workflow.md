@@ -34,7 +34,7 @@ make -j$(nproc)
 
 ## Building Python Packages
 
-Core Lightning includes several Python packages in the workspace that can be built individually or all at once:
+Palladium Lightning includes several Python packages in the workspace that can be built individually or all at once:
 ```shell
 # Build all Python packages
 make pyln-build-all
@@ -63,7 +63,7 @@ uv build contrib/pyln-proto/
 
 ## Local checks with pre-commit
 
-You can avoid common mistakes, speed up your development workflow and avoid wasteful CI runs by opting in to the local code checks managed by [pre-commit](https://pre-commit.com). The `pre-commit` Python package is part of the `dev` group and should be installed along with the other packages using `pip` or `uv` when [installing from source](https://docs.corelightning.org/docs/installation#installing-from-source). Activate it on your local development environment from the root of your Core Lightning working directory with:
+You can avoid common mistakes, speed up your development workflow and avoid wasteful CI runs by opting in to the local code checks managed by [pre-commit](https://pre-commit.com). The `pre-commit` Python package is part of the `dev` group and should be installed along with the other packages using `pip` or `uv` when installing from source. Activate it on your local development environment from the root of your Palladium Lightning working directory with:
 ```shell
 pre-commit install
 ```
